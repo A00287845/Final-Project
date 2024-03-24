@@ -18,6 +18,12 @@
         android:theme="@style/Theme.FinalAndroidMqtt"
         tools:targetApi="31">
         <activity
+            android:name=".PublishMessage"
+            android:exported="false" />
+        <activity
+            android:name=".ReadPublishSensors"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -26,6 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
+
 </manifest>
