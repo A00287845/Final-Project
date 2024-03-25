@@ -5,4 +5,10 @@
 
     <string name="client_details">Client ID: %1$s Client server URI: %2$s Client topic: %3$s</string>
 
+    <string-array name="dropdown_items">
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+        <!-- Add more items here -->
+    </string-array>
 </resources>

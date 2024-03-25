@@ -10,20 +10,28 @@
     <Button
         android:id="@+id/addSubTest"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_weight="1"
-        android:text="Button" />
+        android:layout_height="50dp"
+
+        android:text="Add Subscription" />
 
     <Button
         android:id="@+id/closeManageClientsFragment"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_weight="1"
-        android:text="Close" />
+        android:text="Close"
+        android:visibility="gone"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/clientsRecyclerView"
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/clientsRecyclerView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_weight="1" />-->
+    <Spinner
+        android:id="@+id/spinner"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_height="50dp" />
+
+
 </LinearLayout>
