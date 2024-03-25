@@ -41,8 +41,10 @@ public class Mqtt {
     }
 
 
-    public void setupBroker(Context appContext, String cliendId, String brokerUri) {
-        MqttAndroidClient mqttAndroidClient = getMqttAndroidClient(appContext, cliendId, brokerUri);
+    public void setupBroker(Context appContext, String clientId, String brokerUri) {
+        Log.d("Eoghan", "Mqtt setupBroker");
+
+        MqttAndroidClient mqttAndroidClient = getMqttAndroidClient(appContext, clientId, brokerUri);
 
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
@@ -54,42 +56,67 @@ public class Mqtt {
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d("Mqtt setupBroker", "onSuccess: Adding " + mqttAndroidClient.getClientId() + " to connected clients list.");
+                    Log.d("Eoghan", "Mqtt setupBroker onSuccess: Adding " + mqttAndroidClient.getClientId() + " to connected clients list.");
                     app.addClientToList(mqttAndroidClient);
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.e("Mqtt setupBroker", "onFailure: ", exception);
+                    Log.e("Eoghan", "Mqtt setupBroker onFailure: ", exception);
                 }
             });
         } catch (MqttException e) {
-            e.printStackTrace();
+            Log.e("Eoghan", "Mqtt setupBroker mqtt exception: ", e);
         }
 
     }
 
     @NonNull
-    private static MqttAndroidClient getMqttAndroidClient(Context appContext, String clientId, String serverUri) {
+    private MqttAndroidClient getMqttAndroidClient(Context appContext, String clientId, String serverUri) {
         MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(appContext, serverUri, clientId);
 
         mqttAndroidClient.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
-                Log.e("Mqtt getMqttAndroidClient", "connectionLost: client: " + mqttAndroidClient.getClientId(), cause);
+                Log.e("EOGHAN", "Mqtt getMqttAndroidClient connectionLost: client: " + mqttAndroidClient.getClientId(), cause);
             }
 
             @Override
             public void messageArrived(String topic, MqttMessage message) {
-                Log.d("Mqtt getMqttAndroidClient", "messageArrived: topic: " + topic + " message " + message);
+                Log.d("EOGHAN", " Mqtt getMqttAndroidClient messageArrived: topic: " + topic + " message " + message);
             }
 
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
-                Log.d("Mqtt getMqttAndroidClient", "deliveryComplete: token: " + token);
+                Log.d("", "Mqtt getMqttAndroidClient deliveryComplete: token: " + token);
             }
         });
         return mqttAndroidClient;
     }
 
+    public void subscribeToTopic(String topic, MqttAndroidClient client){
+
+        Log.d("Eoghan", "Mqtt subscribeToTopic");
+
+        int qos = 1; // at least once
+        try {
+            IMqttToken subToken = client.subscribe(topic, qos);
+            subToken.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken)
+                {
+                    Log.d("Eoghan", "Mqtt subscribeToTopic onSuccess:");
+                    Log.d("Eoghan", "Mqtt subscribeToTopic onSuccess: clientId " + client.getClientId() + " topic: " + topic);
+                    app.addSubscriptionToList(client.getClientId(), topic);
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Log.e("Eoghan", "Mqtt subscribeToTopic onFailure: ", exception);
+                }
+            });
+        } catch (MqttException e) {
+            Log.e("Eoghan", "Mqtt subscribeToTopic mqtt exception: ", e);
+        }
+    }
 }

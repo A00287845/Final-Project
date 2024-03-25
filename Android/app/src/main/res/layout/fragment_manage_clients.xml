@@ -8,9 +8,16 @@
     android:background="#3F51B5">
 
     <Button
+        android:id="@+id/addSubTest"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_weight="1"
+        android:text="Button" />
+
+    <Button
         android:id="@+id/closeManageClientsFragment"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_weight="1"
         android:text="Close" />
 
