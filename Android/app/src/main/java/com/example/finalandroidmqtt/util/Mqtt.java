@@ -5,6 +5,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.finalandroidmqtt.MqttApplication;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -15,21 +17,23 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Mqtt {
 
     private static volatile Mqtt instance;
-    private ArrayList<MqttAndroidClient> clients;
+    private MqttApplication app;
 
-    private Mqtt() {
-        clients = new ArrayList<>();
+    private Mqtt(MqttApplication app) {
+        this.app = app;
     }
 
-    public static Mqtt getInstance() {
+    public static Mqtt getInstance(MqttApplication app) {
         if (instance == null) {
             synchronized (Mqtt.class) {
                 if (instance == null) {
-                    instance = new Mqtt();
+                    instance = new Mqtt(app);
                 }
             }
         }
@@ -51,7 +55,7 @@ public class Mqtt {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d("Mqtt setupBroker", "onSuccess: Adding " + mqttAndroidClient.getClientId() + " to connected clients list.");
-                    clients.add(mqttAndroidClient);
+                    app.addClientToList(mqttAndroidClient);
                 }
 
                 @Override
@@ -76,7 +80,7 @@ public class Mqtt {
             }
 
             @Override
-            public void messageArrived(String topic, MqttMessage message){
+            public void messageArrived(String topic, MqttMessage message) {
                 Log.d("Mqtt getMqttAndroidClient", "messageArrived: topic: " + topic + " message " + message);
             }
 
@@ -88,7 +92,4 @@ public class Mqtt {
         return mqttAndroidClient;
     }
 
-    public ArrayList<MqttAndroidClient> getClients() {
-        return clients;
-    }
 }
