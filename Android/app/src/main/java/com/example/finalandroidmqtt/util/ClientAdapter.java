@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.finalandroidmqtt.MqttApplication;
+import com.example.finalandroidmqtt.view.MqttApplication;
 import com.example.finalandroidmqtt.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -69,7 +69,9 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
         String clientDetails = holder.itemView.getContext().getResources().getString(R.string.client_details, client.getClientId(), client.getServerURI(), topic);
         Log.d("Eoghan", "ClientAdapter onBindViewHolder Client Details String prepared: " + clientDetails);
 
-        holder.clientTv.setText(clientDetails);
+        holder.clientIdTv.setText(client.getClientId());
+        holder.clientUriTv.setText(client.getServerURI());
+        holder.clientSubscriptionsTv.setText(topic);
         Log.d("Eoghan", "ClientAdapter onBindViewHolder Client details set to TextView with clientDetails: " + clientDetails);
     }
 
@@ -100,12 +102,14 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
     }
 
     public static class ClientViewHolder extends RecyclerView.ViewHolder {
-        TextView clientTv;
+        TextView clientIdTv, clientUriTv, clientSubscriptionsTv;
 
         public ClientViewHolder(@NonNull View itemView) {
             super(itemView);
             Log.d("Eoghan", "ClientAdapter ClientViewHolder constructor called.");
-            clientTv = itemView.findViewById(R.id.clientContent);
+            clientIdTv = itemView.findViewById(R.id.clientIdTv);
+            clientUriTv = itemView.findViewById(R.id.clientUrlTv);
+            clientSubscriptionsTv = itemView.findViewById(R.id.clientSubsTv);
             Log.d("Eoghan", "ClientAdapter ClientViewHolder constructor clientTv TextView found in itemView.");
         }
     }

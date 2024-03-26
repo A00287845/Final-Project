@@ -1,4 +1,4 @@
-package com.example.finalandroidmqtt;
+package com.example.finalandroidmqtt.view;
 
 import android.app.Application;
 import android.util.Log;

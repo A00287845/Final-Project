@@ -1,4 +1,4 @@
-package com.example.finalandroidmqtt;
+package com.example.finalandroidmqtt.view;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
-
-import java.util.Map;
+import com.example.finalandroidmqtt.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
         });
         Log.d("Eoghan", "MainActivity onCreate: Set OnApplyWindowInsetsListener");
 
-        MqttApplication application = (MqttApplication) getApplication();
+        //MqttApplication application = (MqttApplication) getApplication();
         Log.d("Eoghan", "MainActivity onCreate: MqttApplication obtained");
 
-        application.getMqtt().setupBroker(this, "Client_1", "tcp://broker.hivemq.com:1883");
+        //application.getMqtt().setupBroker(this, "Client_1", "tcp://broker.hivemq.com:1883");
         Log.d("Eoghan", "MainActivity onCreate: Setup MQTT Broker with Client_1 at tcp://broker.hivemq.com:1883");
 
         addFragment(new ManageClientsFragment());
