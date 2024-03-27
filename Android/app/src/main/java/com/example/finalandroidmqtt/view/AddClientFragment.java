@@ -16,9 +16,6 @@ import com.example.finalandroidmqtt.R;
 
 public class AddClientFragment extends DialogFragment {
     private MqttApplication application;
-    private EditText clientIdEditText;
-    private EditText clientUriEditText;
-
     private View dialogView;
 
     public AddClientFragment(){}
@@ -29,7 +26,6 @@ public class AddClientFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Inflate the layout once and keep a reference to it
         application = (MqttApplication) getActivity().getApplication();
 
         dialogView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_client, null);
@@ -58,7 +54,8 @@ public class AddClientFragment extends DialogFragment {
                 if (!clientId.isEmpty()) {
                     // Your validation passed, handle the data
                     if(clientBrokerUri.isEmpty()){
-                        application.getMqtt().setupBroker(application.getApplicationContext(), clientId, "tcp://broker.hivemq.com:1883");
+//                        application.getMqtt().setupBroker(application.getApplicationContext(), clientId, "tcp://broker.hivemq.com:1883");
+                        application.getMqtt().setupBroker(application.getApplicationContext(), clientId, "ssl://930094acb7da4acfbf5761b3ac2c7c90.s1.eu.hivemq.cloud:8883");
 
                     }else {
                         application.getMqtt().setupBroker(application.getApplicationContext(), clientId, clientBrokerUri);

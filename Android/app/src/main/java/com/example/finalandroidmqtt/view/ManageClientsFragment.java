@@ -12,18 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.example.finalandroidmqtt.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -34,7 +26,6 @@ public class ManageClientsFragment extends Fragment {
 
     public ManageClientsFragment() {
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,25 +89,6 @@ public class ManageClientsFragment extends Fragment {
         });
     }
 
-    private void addSubscription() {
-//        Log.d("EOGHAN", "**********************************************************");
-//
-//        Log.d("Eoghan", "ManageClientsFragment addSubscription");
-//
-//        MqttApplication application = (MqttApplication) requireContext().getApplicationContext();
-//        Map<String, MqttAndroidClient> clients = application.getMutableMqttClientList().getValue();
-//        if (clients != null) {
-//            MqttAndroidClient client = clients.get("Client_1");
-//            if (client != null) {
-//                application.getMqtt().subscribeToTopic("test/topic", client);
-//            } else {
-//                Log.d("Eoghan", "ManageClientsFragment addSubscription: client is null");
-//            }
-//        } else {
-//            Log.d("Eoghan", "ManageClientsFragment addSubscription: clients is null");
-//        }
-    }
-
     private void updateUI(Map<String, MqttAndroidClient> clients, MqttApplication application) {
 
 
@@ -162,5 +134,4 @@ public class ManageClientsFragment extends Fragment {
         clientListViewRecyclerView.setAdapter(adapter);
         Log.d("Eoghan", "ManageClientsFragment Adapter set to RecyclerView");
     }
-
 }

@@ -89,8 +89,6 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
         Log.d("Eoghan", "ClientAdapter onBindViewHolder Client details set to TextView with clientDetails: " + clientDetails);
     }
 
-
-
     @Override
     public int getItemCount() {
         Log.d("Eoghan", "ClientAdapter getItemCount called.");
@@ -102,7 +100,6 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
             return 0;
         }
     }
-
 
     public void updateData(Map<String, MqttAndroidClient> newClients) {
         Log.d("Eoghan", "ClientAdapter updateData called with newClients size: " + (newClients != null ? newClients.size() : "null"));
@@ -148,5 +145,4 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
             });
         }
     }
-
 }
