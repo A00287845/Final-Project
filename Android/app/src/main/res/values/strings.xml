@@ -4,11 +4,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="client_details">Client ID: %1$s Client server URI: %2$s Client topic: %3$s</string>
-    <string name="broker_uri">Broker Uri</string>
+    <string name="broker_uri">Broker Uri (blank for default)</string>
     <string name="submit">Submit</string>
     <string name="client_id">Client ID</string>
     <string name="add_client">Add Client</string>
     <string name="add_subscription">Add Subscription</string>
+    <string name="clients">Clients</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="topic">topic</string>
 
     <string-array name="dropdown_items">
         <item>Item 1</item>

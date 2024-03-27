@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/selectedClientName"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:padding="3dp"
@@ -16,24 +16,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <Button
-        android:id="@+id/submitClientButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintStart_toEndOf="@+id/clientUrlEt"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
-        android:id="@+id/clientUrlEt"
-        android:layout_width="wrap_content"
+        android:id="@+id/newSubTopicEt"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textUri"
-        android:hint="@string/broker_uri"
+        android:hint="@string/topic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectedClientName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

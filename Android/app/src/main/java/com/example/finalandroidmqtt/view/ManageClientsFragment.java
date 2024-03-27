@@ -19,7 +19,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.finalandroidmqtt.R;
-import com.example.finalandroidmqtt.util.ClientAdapter;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 
@@ -29,13 +28,9 @@ import java.util.Map;
 
 
 public class ManageClientsFragment extends Fragment {
-    private ClientAdapter adapter;
-    private Button addSubscriptionButton;
-
-    private Spinner dropDownItemsSpinner;
+    private com.example.finalandroidmqtt.util.ClientAdapter adapter;
 
     private RecyclerView clientListViewRecyclerView;
-
 
     public ManageClientsFragment() {
     }
@@ -67,27 +62,16 @@ public class ManageClientsFragment extends Fragment {
         Log.d("Eoghan", "ManageClientsFragment setUpObservation: Completed");
 
 
-        setUpDropdown();
-
         requireActivity().findViewById(R.id.addClientOpenFragmentButton).setOnClickListener(v -> {
-            AddClientFragment dialogFragment = new AddClientFragment(application);
+            AddClientFragment dialogFragment = new AddClientFragment();
             dialogFragment.show(getChildFragmentManager(), "Add clieent");
 
         });
-
-        addSubscriptionButton = requireActivity().findViewById(R.id.addSubscriptionOpenFragmentButton);
-
-        addSubscriptionButton.setOnClickListener(v->{
-            AddSubscriptionFragment dialogFragment = new AddSubscriptionFragment();
-            dialogFragment.show(getChildFragmentManager(), "Add subscription");
-        });
-
-
     }
 
     private void setUpObservation(MqttApplication application) {
         Log.d("Eoghan", "ManageClientsFragment setUpObservation: Start");
-        application.getMutableMqttClientList().observe(getViewLifecycleOwner(), clients -> {
+        application.getMqtt().getMutableMqttClientMap().observe(getViewLifecycleOwner(), clients -> {
             Log.d("Eoghan", "ManageClientsFragment MutableMqttClientList observed");
             if (clients != null) {
                 Log.d("Eoghan", "ManageClientsFragment Clients not null, count: " + clients.size());
@@ -107,9 +91,9 @@ public class ManageClientsFragment extends Fragment {
             }
         });
 
-        application.getMutableSubscriptionMap().observe(getViewLifecycleOwner(), subscriptions -> {
+        application.getMqtt().getMutableSubscriptionMap().observe(getViewLifecycleOwner(), subscriptions -> {
             if (subscriptions != null) {
-                updateUI(application.getMutableMqttClientList().getValue(), application);
+                updateUI(application.getMqtt().getMutableMqttClientMap().getValue(), application);
             }
         });
     }
@@ -136,16 +120,22 @@ public class ManageClientsFragment extends Fragment {
     private void updateUI(Map<String, MqttAndroidClient> clients, MqttApplication application) {
 
 
-        if (application.getMutableMqttClientList().getValue() != null){
-            if (!application.getMutableMqttClientList().getValue().isEmpty()){
-                addSubscriptionButton.setVisibility(View.VISIBLE);
-                dropDownItemsSpinner.setVisibility(View.VISIBLE);
-                clientListViewRecyclerView.setVisibility(View.VISIBLE);
-            }else{
-                addSubscriptionButton.setVisibility(View.GONE);
-                dropDownItemsSpinner.setVisibility(View.GONE);
-                clientListViewRecyclerView.setVisibility(View.GONE);
-            }
+        if (application.getMqtt().getMutableMqttClientMap().getValue() == null) {
+            Log.d("EOGHAN", "ManageClientsFragment updateUi: list is null");
+
+
+            return;
+        }
+
+        if (clientListViewRecyclerView == null) {
+            Log.d("EOGHAN", "ManageClientsFragment updateUi: some component is null, recycler view: " + clientListViewRecyclerView);
+            return;
+        }
+
+        if (!application.getMqtt().getMutableMqttClientMap().getValue().isEmpty()) {
+            clientListViewRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            clientListViewRecyclerView.setVisibility(View.GONE);
         }
 
         Log.d("Eoghan", "ManageClientsFragment updateUI: Start");
@@ -166,42 +156,11 @@ public class ManageClientsFragment extends Fragment {
         clientListViewRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         Log.d("Eoghan", "ManageClientsFragment LayoutManager set");
 
-        adapter = new ClientAdapter(application.getMutableMqttClientList().getValue());
+        adapter = new com.example.finalandroidmqtt.util.ClientAdapter(application.getMqtt().getMutableMqttClientMap().getValue(), application);
         Log.d("Eoghan", "ManageClientsFragment Adapter initialized");
 
         clientListViewRecyclerView.setAdapter(adapter);
         Log.d("Eoghan", "ManageClientsFragment Adapter set to RecyclerView");
     }
 
-    private void setUpDropdown() {
-        List<String> dropdownItems = new ArrayList<>();
-        dropdownItems.add("Item 1");
-        dropdownItems.add("Item 2");
-        dropdownItems.add("Item 3");
-        dropDownItemsSpinner = requireActivity().findViewById(R.id.clientDropDownSpinner);
-
-        // Create an ArrayAdapter using the list and a default spinner layout
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, dropdownItems);
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner
-        dropDownItemsSpinner.setAdapter(adapter);
-        final boolean[] setup = {false};
-        dropDownItemsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if(setup[0]) {
-                    Toast.makeText(requireActivity(), dropdownItems.get(position), Toast.LENGTH_SHORT).show();
-                }
-                setup[0] = true;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // Optionally implement this method if you want to react to nothing being selected
-            }
-        });
-    }
 }

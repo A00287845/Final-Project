@@ -13,32 +13,13 @@
         android:layout_height="50dp"
         android:text="@string/add_client" />
 
-
-
-<!--    <Button-->
-<!--        android:id="@+id/closeManageClientsFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="150dp"-->
-<!--        android:text="Close"/>-->
-    <Spinner
-        android:id="@+id/clientDropDownSpinner"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="20dp" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:visibility="gone"
         android:id="@+id/clientsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="600dp" />
 
-    <Button
-        android:id="@+id/addSubscriptionOpenFragmentButton"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:visibility="gone"
-        android:text="@string/add_subscription" />
+
 
 
 

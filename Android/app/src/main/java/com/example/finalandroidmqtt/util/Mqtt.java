@@ -4,8 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import com.example.finalandroidmqtt.view.MqttApplication;
+import androidx.lifecycle.MutableLiveData;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -16,20 +15,27 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 public class Mqtt {
-
     private static volatile Mqtt instance;
-    private MqttApplication app;
+    private final MutableLiveData<Map<String, MqttAndroidClient>> mutableMqttClientMap;
+    private final MutableLiveData<Map<String, Set<String>>> mutableSubscriptionMap;
 
-    private Mqtt(MqttApplication app) {
-        this.app = app;
+    private Mqtt() {
+        mutableMqttClientMap = new MutableLiveData<>();
+        mutableSubscriptionMap = new MutableLiveData<>();
     }
 
-    public static Mqtt getInstance(MqttApplication app) {
+    public static Mqtt getInstance() {
         if (instance == null) {
             synchronized (Mqtt.class) {
                 if (instance == null) {
-                    instance = new Mqtt(app);
+                    instance = new Mqtt();
                 }
             }
         }
@@ -53,7 +59,7 @@ public class Mqtt {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d("Eoghan", "Mqtt setupBroker onSuccess: Adding " + mqttAndroidClient.getClientId() + " to connected clients list.");
-                    app.addClientToList(mqttAndroidClient);
+                    addClientToMap(mqttAndroidClient);
                 }
 
                 @Override
@@ -103,7 +109,7 @@ public class Mqtt {
                 {
                     Log.d("Eoghan", "Mqtt subscribeToTopic onSuccess:");
                     Log.d("Eoghan", "Mqtt subscribeToTopic onSuccess: clientId " + client.getClientId() + " topic: " + topic);
-                    app.addSubscriptionToList(client.getClientId(), topic);
+                    addSubscriptionToList(client.getClientId(), topic);
                 }
 
                 @Override
@@ -114,5 +120,88 @@ public class Mqtt {
         } catch (MqttException e) {
             Log.e("Eoghan", "Mqtt subscribeToTopic mqtt exception: ", e);
         }
+    }
+
+
+    public MutableLiveData<Map<String, MqttAndroidClient>> getMutableMqttClientMap() {
+        return mutableMqttClientMap;
+    }
+
+    public void setMutableMqttClientMap(Map<String, MqttAndroidClient> clientList) {
+        mutableMqttClientMap.postValue(clientList);
+    }
+
+    public void addClientToMap(MqttAndroidClient client) {
+        Map<String, MqttAndroidClient> clientList = mutableMqttClientMap.getValue();
+        if (clientList == null) {
+            clientList = new HashMap<>();
+        }
+        clientList.put(client.getClientId(), client);
+        mutableMqttClientMap.postValue(clientList);
+    }
+
+    public void removeClientByNameFromMap(String clientName) {
+        // Early retrieval with null checks
+        Map<String, MqttAndroidClient> clientMap = mutableMqttClientMap.getValue();
+        Map<String, Set<String>> subscriptionMap = mutableSubscriptionMap.getValue();
+        if (clientMap == null || subscriptionMap == null) {
+            return; // No action needed if either map is null
+        }
+
+        // Attempt to remove the client and disconnect if present
+        MqttAndroidClient client = clientMap.remove(clientName);
+        if (client != null) {
+            try {
+                client.disconnect(); // Disconnect the client if it was found
+            } catch (MqttException e) {
+                // Consider logging the exception instead of throwing a runtime exception
+                Log.e("removeClientByName", "Error disconnecting client: " + clientName, e);
+                // Optionally, handle the error more gracefully or rethrow as a checked exception
+            }
+        }
+
+        // Remove the subscription associated with the clientName if present
+        subscriptionMap.remove(clientName);
+
+        // Post the updated maps back to their respective LiveData or observable fields
+        mutableSubscriptionMap.postValue(subscriptionMap);
+        mutableMqttClientMap.postValue(clientMap);
+    }
+
+    public MutableLiveData<Map<String, Set<String>>> getMutableSubscriptionMap() {
+        return mutableSubscriptionMap;
+    }
+
+    public void setMutableSubscriptionMap(Map<String, Set<String>> subscriptionMap) {
+        mutableSubscriptionMap.postValue(subscriptionMap);
+    }
+
+    public void addSubscriptionToList(String client, String subscription) {
+        Log.d("Eoghan", "MqttApplication addSubscriptionToList called with client: " + client + ", subscription: " + subscription);
+
+        Map<String, Set<String>> subscriptionMap = mutableSubscriptionMap.getValue();
+        Log.d("Eoghan", "MqttApplication Current subscriptionMap retrieved. Null? " + (subscriptionMap == null));
+
+        if (subscriptionMap == null) {
+            subscriptionMap = new HashMap<>();
+            Log.d("Eoghan", "MqttApplication subscriptionMap was null, initialized new HashMap.");
+        }
+
+        Set<String> clientSubs = subscriptionMap.get(client);
+        Log.d("Eoghan", "MqttApplication Client subscriptions retrieved for client '" + client + "'. Null? " + (clientSubs == null));
+
+        if (clientSubs == null) {
+            clientSubs = new HashSet<>();
+            Log.d("Eoghan", "MqttApplication clientSubs was null, initialized new HashSet.");
+        }
+
+        clientSubs.add(subscription);
+        Log.d("Eoghan", "MqttApplication Added subscription '" + subscription + "' to clientSubs. Total subs now: " + clientSubs.size());
+
+        subscriptionMap.put(client, clientSubs);
+        Log.d("Eoghan", "MqttApplication Updated subscriptionMap with client '" + client + "' subscriptions. Total clients now: " + subscriptionMap.size());
+
+        mutableSubscriptionMap.postValue(subscriptionMap);
+        Log.d("Eoghan", "MqttApplication Posted updated subscriptionMap to mutableSubscriptionMap.");
     }
 }

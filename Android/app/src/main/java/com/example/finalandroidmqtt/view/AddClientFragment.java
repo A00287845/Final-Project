@@ -1,17 +1,14 @@
 package com.example.finalandroidmqtt.view;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
@@ -26,9 +23,6 @@ public class AddClientFragment extends DialogFragment {
 
     public AddClientFragment(){}
 
-    public AddClientFragment(MqttApplication application){
-        this.application = application;
-    }
 
 
     @NonNull
@@ -36,6 +30,8 @@ public class AddClientFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Inflate the layout once and keep a reference to it
+        application = (MqttApplication) getActivity().getApplication();
+
         dialogView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_client, null);
 
         builder.setTitle("Add a new client");
@@ -55,7 +51,7 @@ public class AddClientFragment extends DialogFragment {
             Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(view -> {
                 EditText clientIdEditText = dialogView.findViewById(R.id.clientIdEntryEt);
-                EditText clientUriEditText = dialogView.findViewById(R.id.clientUrlEt);
+                EditText clientUriEditText = dialogView.findViewById(R.id.newSubTopicEt);
 
                 String clientId = clientIdEditText.getText().toString();
                 String clientBrokerUri = clientUriEditText.getText().toString();
@@ -73,13 +69,5 @@ public class AddClientFragment extends DialogFragment {
                 }
             });
         }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        clientIdEditText = requireActivity().findViewById(R.id.clientIdEntryEt);
-        clientUriEditText = requireActivity().findViewById(R.id.clientUrlEt);
     }
 }

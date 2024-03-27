@@ -45,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
         addFragment(new ManageClientsFragment());
         Log.d("Eoghan", "MainActivity onCreate: Added ManageClientsFragment");
+
+        findViewById(R.id.clientFragmentButton).setOnClickListener(v->{
+            addFragment(new ManageClientsFragment());
+        });
+        findViewById(R.id.subsFragmentButton).setOnClickListener(v->{
+            addFragment(new ManageSubscriptionsFragment());
+        });
     }
 
 
