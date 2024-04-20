@@ -1,0 +1,85 @@
+[
+    {
+        "id": "ce7991709fc76672",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "491640ca73c9f772",
+        "type": "rpi-sensehat out",
+        "z": "ce7991709fc76672",
+        "name": "Sense-hat led Matrix",
+        "x": 340,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "4d12936a0bb576ea",
+        "type": "rpi-sensehat in",
+        "z": "ce7991709fc76672",
+        "name": "Sense-Hat Environment Reading",
+        "motion": false,
+        "env": true,
+        "stick": false,
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "4f57688ae5cb4a70"
+            ]
+        ]
+    },
+    {
+        "id": "4f57688ae5cb4a70",
+        "type": "mqtt out",
+        "z": "ce7991709fc76672",
+        "name": "SenseHat Temperature",
+        "topic": "a00287845/nodered/sensehat",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8d230c7b23e504df",
+        "x": 1010,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "8d230c7b23e504df",
+        "type": "mqtt-broker",
+        "name": "HiveMqttA00287845",
+        "broker": "ssl://930094acb7da4acfbf5761b3ac2c7c90.s1.eu.hivemq.cloud:8883",
+        "port": "8884",
+        "tls": "",
+        "clientid": "NodeRed-EoghanPi",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
