@@ -12,8 +12,8 @@
         "type": "rpi-sensehat out",
         "z": "ce7991709fc76672",
         "name": "Sense-hat led Matrix",
-        "x": 340,
-        "y": 180,
+        "x": 600,
+        "y": 520,
         "wires": []
     },
     {
@@ -24,8 +24,8 @@
         "motion": false,
         "env": true,
         "stick": false,
-        "x": 390,
-        "y": 100,
+        "x": 330,
+        "y": 300,
         "wires": [
             [
                 "4f57688ae5cb4a70"
@@ -46,8 +46,116 @@
         "correl": "",
         "expiry": "",
         "broker": "8d230c7b23e504df",
-        "x": 1010,
-        "y": 120,
+        "x": 1130,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "1220381363ae0d3b",
+        "type": "rpi-sensehat in",
+        "z": "ce7991709fc76672",
+        "name": "SenseHat Motion Events",
+        "motion": true,
+        "env": false,
+        "stick": false,
+        "x": 490,
+        "y": 780,
+        "wires": [
+            [
+                "7f0428b3509c818f",
+                "4467097e46d2c974"
+            ]
+        ]
+    },
+    {
+        "id": "7f0428b3509c818f",
+        "type": "mqtt out",
+        "z": "ce7991709fc76672",
+        "name": "a00287845/sensehat/events/motion",
+        "topic": "a00287845/sensehat/events/motion",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8d230c7b23e504df",
+        "x": 1250,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "559812a4018c1a8d",
+        "type": "delay",
+        "z": "ce7991709fc76672",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 820,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4467097e46d2c974",
+        "type": "debug",
+        "z": "ce7991709fc76672",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 810,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "69b99758f98494c0",
+        "type": "rpi-sensehat in",
+        "z": "ce7991709fc76672",
+        "name": "teee",
+        "motion": true,
+        "env": false,
+        "stick": false,
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "989fecd7ae153ba3"
+            ]
+        ]
+    },
+    {
+        "id": "989fecd7ae153ba3",
+        "type": "debug",
+        "z": "ce7991709fc76672",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 530,
+        "y": 100,
         "wires": []
     },
     {

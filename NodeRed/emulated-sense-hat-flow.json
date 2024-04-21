@@ -1,21 +1,24 @@
 [
     {
-        "id": "bd75a9a477bea1a8",
-        "type": "mqtt out",
+        "id": "f861421f35f9991b",
+        "type": "mqtt in",
         "z": "f6f2187d.f17ca8",
-        "name": "noderedTest",
-        "topic": "test/eoghan",
+        "name": "",
+        "topic": "",
         "qos": "2",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
+        "datatype": "auto-detect",
         "broker": "99753d8609cc2ac1",
-        "x": 950,
-        "y": 260,
-        "wires": []
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 750,
+        "y": 480,
+        "wires": [
+            [
+                "8403471e23a2ff4a"
+            ]
+        ]
     },
     {
         "id": "99753d8609cc2ac1",
