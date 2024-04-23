@@ -1,5 +1,5 @@
-device/rpi/sensors/gyroscope: Carries gyroscope data from the Raspberry Pi.
-device/rpi/sensors/pressure: Carries atmospheric pressure data from the Raspberry Pi.
-device/android/sensors/light: Carries light sensor data from the Android device.
-device/android/sensors/proximity: Carries proximity sensor data from the Android device.
-device/esp8266/actuators/led: Receives commands to control LED states on the ESP8266.
+a00287845/device/rpi/sensors/gyroscope: Carries gyroscope data from the Raspberry Pi.
+a00287845/device/rpi/sensors/pressure: Carries atmospheric pressure data from the Raspberry Pi.
+a00287845/device/android/sensors/light: Carries light sensor data from the Android device.
+a00287845/device/android/sensors/proximity: Carries proximity sensor data from the Android device.
+a00287845/device/esp8266/actuators/led: Receives commands to control LED states on the ESP8266.
