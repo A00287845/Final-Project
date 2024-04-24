@@ -12,6 +12,7 @@
     <string name="clients">Clients</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="topic">topic</string>
+    <string name="enter_topic_to_publish_to">Enter topic to publish to</string>
 
     <string-array name="dropdown_items">
         <item>Item 1</item>

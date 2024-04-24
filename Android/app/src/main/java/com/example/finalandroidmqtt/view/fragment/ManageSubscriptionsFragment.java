@@ -1,4 +1,4 @@
-package com.example.finalandroidmqtt.view;
+package com.example.finalandroidmqtt.view.fragment;
 
 import android.os.Bundle;
 
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class ManageSubscriptionsFragment extends Fragment {
 
     private Spinner dropDownItemsSpinner;
-    private Button addSubscriptionButton;
+    private Button addSubscriptionButton, addSensorButton;
     private ArrayAdapter<String> dropDownAdapter;
 
     private String currentSelectedClient;
@@ -58,10 +59,16 @@ public class ManageSubscriptionsFragment extends Fragment {
         setUpObservation(application);
         handleDropdown(application);
         addSubscriptionButton = requireActivity().findViewById(R.id.addSubscriptionOpenFragmentButton);
+        addSensorButton = requireActivity().findViewById(R.id.addTopicOpenFragmentButton);
 
         addSubscriptionButton.setOnClickListener(v -> {
             AddSubscriptionFragment dialogFragment = AddSubscriptionFragment.newInstance(currentSelectedClient);
             dialogFragment.show(getChildFragmentManager(), "Add subscription");
+        });
+
+        addSensorButton.setOnClickListener( v-> {
+            AddPublisherFragment dialogFragment = AddPublisherFragment.newInstance(currentSelectedClient);
+            dialogFragment.show(getChildFragmentManager(), "addSensorTopic");
         });
     }
 
@@ -91,6 +98,7 @@ public class ManageSubscriptionsFragment extends Fragment {
 
         if (!application.getMqtt().getMutableMqttClientMap().getValue().isEmpty()) {
             addSubscriptionButton.setVisibility(View.VISIBLE);
+            addSensorButton.setVisibility(View.VISIBLE);
             dropDownItemsSpinner.setVisibility(View.VISIBLE);
             handleDropdown(application);
         } else {

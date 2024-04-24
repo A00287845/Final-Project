@@ -1,21 +1,27 @@
-package com.example.finalandroidmqtt.view;
+package com.example.finalandroidmqtt.view.fragment;
 
+import android.hardware.Sensor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -41,22 +47,17 @@ public class ManageClientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d("Eoghan", "ManageClientsFragment onViewCreated: Start");
         super.onViewCreated(view, savedInstanceState);
-        Log.d("Eoghan", "ManageClientsFragment super.onViewCreated called");
 
         MqttApplication application = (MqttApplication) requireContext().getApplicationContext();
-        Log.d("Eoghan", "ManageClientsFragment MqttApplication obtained");
 
         setUpRecyclerView(view, application);
-        Log.d("Eoghan", "ManageClientsFragment setUpRecyclerView: Completed");
 
         setUpObservation(application);
-        Log.d("Eoghan", "ManageClientsFragment setUpObservation: Completed");
 
 
         requireActivity().findViewById(R.id.addClientOpenFragmentButton).setOnClickListener(v -> {
             AddClientFragment dialogFragment = new AddClientFragment();
             dialogFragment.show(getChildFragmentManager(), "Add clieent");
-
         });
     }
 
@@ -76,7 +77,7 @@ public class ManageClientsFragment extends Fragment {
                 Log.d("Eoghan", "ManageClientsFragment Clients not null, clientString: " + clientString);
 
                 Log.d("Eoghan", "ManageClientsFragment updateUI: Called");
-                updateUI(clients, application);
+                updateUI(clients, application, application.getMqtt().getSensorTopics().getValue());
             } else {
                 Log.d("Eoghan", "ManageClientsFragment Clients is null");
             }
@@ -84,18 +85,21 @@ public class ManageClientsFragment extends Fragment {
 
         application.getMqtt().getMutableSubscriptionMap().observe(getViewLifecycleOwner(), subscriptions -> {
             if (subscriptions != null) {
-                updateUI(application.getMqtt().getMutableMqttClientMap().getValue(), application);
+                updateUI(application.getMqtt().getMutableMqttClientMap().getValue(), application, application.getMqtt().getSensorTopics().getValue());
+            }
+        });
+
+        application.getMqtt().getSensorTopics().observe(getViewLifecycleOwner(), topics -> {
+            if (topics != null) {
+                updateUI(application.getMqtt().getMutableMqttClientMap().getValue(), application, topics);
             }
         });
     }
 
-    private void updateUI(Map<String, MqttAndroidClient> clients, MqttApplication application) {
-
+    private void updateUI(Map<String, MqttAndroidClient> clients, MqttApplication application, Map<String, List<Pair<Sensor, String>>> clientSensors) {
 
         if (application.getMqtt().getMutableMqttClientMap().getValue() == null) {
             Log.d("EOGHAN", "ManageClientsFragment updateUi: list is null");
-
-
             return;
         }
 
@@ -113,7 +117,8 @@ public class ManageClientsFragment extends Fragment {
         Log.d("Eoghan", "ManageClientsFragment updateUI: Start");
         if (adapter != null) {
             Log.d("Eoghan", "ManageClientsFragment Adapter not null, updating data with clients: " + clients);
-            adapter.updateData(clients);
+
+            adapter.updateData(clients, clientSensors);
             Log.d("Eoghan", "ManageClientsFragment Adapter data updated");
         } else {
             Log.d("Eoghan", "ManageClientsFragment Adapter is null");
@@ -121,17 +126,9 @@ public class ManageClientsFragment extends Fragment {
     }
 
     private void setUpRecyclerView(View view, MqttApplication application) {
-        Log.d("Eoghan", "ManageClientsFragment setUpRecyclerView: Start");
         clientListViewRecyclerView = view.findViewById(R.id.clientsRecyclerView);
-        Log.d("Eoghan", "ManageClientsFragment RecyclerView found");
-
         clientListViewRecyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        Log.d("Eoghan", "ManageClientsFragment LayoutManager set");
-
         adapter = new com.example.finalandroidmqtt.util.ClientAdapter(application.getMqtt().getMutableMqttClientMap().getValue(), application);
-        Log.d("Eoghan", "ManageClientsFragment Adapter initialized");
-
         clientListViewRecyclerView.setAdapter(adapter);
-        Log.d("Eoghan", "ManageClientsFragment Adapter set to RecyclerView");
     }
 }

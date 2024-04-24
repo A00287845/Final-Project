@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3F51B5"
-    tools:context=".view.ManageSubscriptionsFragment">
+    tools:context=".view.fragment.ManageSubscriptionsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <Spinner
@@ -21,8 +21,20 @@
         android:id="@+id/addSubscriptionOpenFragmentButton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:visibility="gone"
         android:text="@string/add_subscription"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clientDropDownSpinner" />
+
+    <Button
+        android:id="@+id/addTopicOpenFragmentButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Add Sensor to Topic "
+        android:visibility="gone"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addSubscriptionOpenFragmentButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

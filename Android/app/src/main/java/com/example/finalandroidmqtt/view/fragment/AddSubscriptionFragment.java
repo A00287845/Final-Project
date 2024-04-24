@@ -1,4 +1,4 @@
-package com.example.finalandroidmqtt.view;
+package com.example.finalandroidmqtt.view.fragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,9 +16,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
+
+import java.util.Objects;
 
 public class AddSubscriptionFragment extends DialogFragment {
     private MqttApplication application;
@@ -45,9 +48,9 @@ public class AddSubscriptionFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        application = (MqttApplication) getActivity().getApplication();
+        application = (MqttApplication) requireActivity().getApplication();
         dialogView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_sub, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         // Customize the dialog here (e.g., title, buttons)
         builder.setTitle("My Floating Window");
         builder.setPositiveButton("Add Subscription", null); // Set the listener later in onStart
