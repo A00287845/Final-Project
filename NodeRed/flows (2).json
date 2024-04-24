@@ -1,0 +1,499 @@
+[
+    {
+        "id": "6c2ee2c66b4cfc5d",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8d230c7b23e504df",
+        "type": "mqtt-broker",
+        "name": "HiveMqttA00287845",
+        "broker": "ssl://930094acb7da4acfbf5761b3ac2c7c90.s1.eu.hivemq.cloud:8883",
+        "port": "8884",
+        "tls": "",
+        "clientid": "NodeRed-EoghanPi",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "68ed218295fabf18",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "52a89d287fa2cc45",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "2b6a9f3ab4ee7986",
+        "type": "ui_group",
+        "name": "Dashboard Group",
+        "tab": "68ed218295fabf18",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "382690a637ad27e8",
+        "type": "inject",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Run on start",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 370,
+        "y": 280,
+        "wires": [
+            [
+                "10975e122612f34b"
+            ]
+        ]
+    },
+    {
+        "id": "ebdd9d909fbc993d",
+        "type": "debug",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "pressure debug",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "10975e122612f34b",
+        "type": "pythonshell in",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "SenseHat Pressure/Gyrpscope",
+        "pyfile": "/home/eoghan/sense_hat_values.py",
+        "virtualenv": "",
+        "continuous": true,
+        "stdInData": true,
+        "x": 730,
+        "y": 280,
+        "wires": [
+            [
+                "875f6a4cd9adcbe4",
+                "4c1d75e860d47dd0"
+            ]
+        ]
+    },
+    {
+        "id": "875f6a4cd9adcbe4",
+        "type": "function",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Extract Pressure Reading",
+        "func": "// Function to extract the pressure from the message\nfunction extractPressure(message) {\n    // Find the start index of \"Pressure:\" in the message\n    var startIndex = message.indexOf(\"Pressure:\") + 9;\n    // Find the end index by locating the comma after the pressure value\n    var endIndex = message.indexOf(\"Millibars\", startIndex);\n    // Extract the pressure substring and trim any extra spaces\n    var pressureString = message.substring(startIndex, endIndex).trim();\n    // Convert the pressure string to a floating-point number\n    var pressureValue = parseFloat(pressureString);\n    return pressureValue;\n}\n\n// Call the function with the actual message content\nmsg.payload = extractPressure(msg.payload);\n\n// Return the modified message object\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 260,
+        "wires": [
+            [
+                "d0562a03add64b39",
+                "1fdb921bcea6a250",
+                "ebdd9d909fbc993d"
+            ]
+        ]
+    },
+    {
+        "id": "d0562a03add64b39",
+        "type": "mqtt out",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "a00287845/device/rpi/sensors/pressure",
+        "topic": "a00287845/device/rpi/sensors/pressure",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8d230c7b23e504df",
+        "x": 1320,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "4c1d75e860d47dd0",
+        "type": "function",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Extract Gyroscope Reading",
+        "func": "// Function to extract and correct gyroscope data from the message\nfunction extractGyroscope(message) {\n    // Find the JSON substring that starts with '{' and ends with '}'\n    var startIndex = message.indexOf('{');\n    var endIndex = message.indexOf('}') + 1;\n    // Extract the JSON substring\n    var gyroscopeString = message.substring(startIndex, endIndex);\n    // Replace single quotes with double quotes to correct JSON formatting\n    var correctedGyroscopeString = gyroscopeString.replace(/'/g, '\"');\n    // Parse the corrected JSON string into a JavaScript object\n    var gyroscopeData;\n    try {\n        gyroscopeData = JSON.parse(correctedGyroscopeString);\n    } catch (error) {\n        node.error(\"Failed to parse gyroscope data: \" + error.message);\n        return null; // Return null or handle the error as needed\n    }\n    return gyroscopeData;\n}\n\n// Call the function with the actual message content\nmsg.payload = extractGyroscope(msg.payload);\n\n// Return the modified message object\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 300,
+        "wires": [
+            [
+                "44e37d3ba4fc7b24",
+                "1aaca2ef274a4407",
+                "ea0e6b7e86c8b6fa",
+                "bb8d1270fd61706d",
+                "a8e34d9e0b6cb174"
+            ]
+        ]
+    },
+    {
+        "id": "ea0e6b7e86c8b6fa",
+        "type": "debug",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "gyroscope debug",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1280,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "44e37d3ba4fc7b24",
+        "type": "mqtt out",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "a00287845/device/rpi/sensors/gyroscope",
+        "topic": "a00287845/device/rpi/sensors/gyroscope",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8d230c7b23e504df",
+        "x": 1420,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "1fdb921bcea6a250",
+        "type": "ui_gauge",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Pressure Gauge",
+        "group": "2b6a9f3ab4ee7986",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Pressure Gauge",
+        "label": "millibars",
+        "format": "{{value}}",
+        "min": "800",
+        "max": "1200",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1590,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "f011f7a1a51f573b",
+        "type": "ui_chart",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Gyroscope - Yaw",
+        "group": "2b6a9f3ab4ee7986",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Gyro - Yaw",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "400",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1650,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1aaca2ef274a4407",
+        "type": "function",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Extract Yaw",
+        "func": "var temp = msg.payload.yaw;\nmsg.payload = temp;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 340,
+        "wires": [
+            [
+                "f011f7a1a51f573b"
+            ]
+        ]
+    },
+    {
+        "id": "6e73b00b0fbbf47e",
+        "type": "ui_gauge",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Gyroscope - Roll",
+        "group": "2b6a9f3ab4ee7986",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Gyroscope - Roll",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "300",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1670,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "d61d593f1ddb4536",
+        "type": "ui_gauge",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Gyroscope - Pitch",
+        "group": "2b6a9f3ab4ee7986",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Gyroscope - Pitch",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "400",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1670,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "bb8d1270fd61706d",
+        "type": "function",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Extract Roll",
+        "func": "var temp = msg.payload.roll;\nmsg.payload = temp;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 420,
+        "wires": [
+            [
+                "6e73b00b0fbbf47e"
+            ]
+        ]
+    },
+    {
+        "id": "a8e34d9e0b6cb174",
+        "type": "function",
+        "z": "6c2ee2c66b4cfc5d",
+        "name": "Extract Pitch",
+        "func": "var temp = msg.payload.pitch;\nmsg.payload = temp;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 480,
+        "wires": [
+            [
+                "d61d593f1ddb4536"
+            ]
+        ]
+    }
+]
