@@ -249,6 +249,16 @@ public class Mqtt {
         }
     }
 
+    public void publishMessage(String topic, String payload){
+        if(clients.getValue()== null){
+            return;
+        }
+        if(clients.getValue().isEmpty()){
+            return;
+        }
+        publishMessage(clients.getValue().get(0).getClient(), topic, payload, 2, false);
+    }
+
     private void publishMessage(MqttAndroidClient client, String topic, String payload, int qos, boolean retained) {
         try {
             MqttMessage message = new MqttMessage();
@@ -311,6 +321,9 @@ public class Mqtt {
                 active = true;
                 break;
             }
+        }
+        if (active == Boolean.TRUE.equals(sensorsActive.getValue())){
+            return;
         }
         sensorsActive.postValue(active);
     }

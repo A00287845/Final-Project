@@ -2,6 +2,7 @@ package com.example.finalandroidmqtt.view.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import com.example.finalandroidmqtt.R;
 import com.example.finalandroidmqtt.util.RepeatedTaskLooper;
 import com.example.finalandroidmqtt.view.fragment.ManageClientsFragment;
 import com.example.finalandroidmqtt.view.fragment.ManageSubscriptionsFragment;
+import com.example.finalandroidmqtt.view.fragment.SendMessageFragment;
 
 public class MainActivity extends AppCompatActivity {
     private RepeatedTaskLooper looper;
@@ -40,12 +42,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        findViewById(R.id.clientFragmentButton).setOnClickListener(v -> {
-            addFragment(new ManageClientsFragment());
-        });
-        findViewById(R.id.subsFragmentButton).setOnClickListener(v -> {
-            addFragment(new ManageSubscriptionsFragment());
-        });
+        findViewById(R.id.clientFragmentButton).setOnClickListener(v -> addFragment(new ManageClientsFragment()));
+        findViewById(R.id.subsFragmentButton).setOnClickListener(v -> addFragment(new ManageSubscriptionsFragment()));
+        findViewById(R.id.messageFragmentButton).setOnClickListener(v-> addFragment(new SendMessageFragment()));
 
         addFragment(new ManageClientsFragment());
         setUpObservation();
@@ -54,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private void setUpObservation() {
         application.getMqtt().getSensorActive().observe(this, active -> {
             Log.d("Eoghan", "MainActivity sensorActive observed");
+            if(!application.getMqtt().getClients().getValue().isEmpty()){
+                findViewById(R.id.messageFragmentButton).setVisibility(View.VISIBLE);
+            }
             if (active != null) {
                 if (!active) {
                     if (looper != null) {
