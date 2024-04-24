@@ -8,6 +8,8 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.finalandroidmqtt.pojo.ClientHolder;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -29,7 +31,7 @@ import java.util.Set;
 
 public class Mqtt {
     private static volatile Mqtt instance;
-    private final MutableLiveData<Map<String, MqttAndroidClient>> mutableMqttClientMap;
+    private final MutableLiveData<List<ClientHolder>> clients = new MutableLiveData<>();
     private final MutableLiveData<Map<String, Set<String>>> mutableSubscriptionMap;
     private final MutableLiveData<List<String>> mutableSubscribedMessagesList;
     private final MutableLiveData<Map<String, List<Pair<Sensor, String>>>> sensorTopics = new MutableLiveData<>();
@@ -37,7 +39,6 @@ public class Mqtt {
 
 
     private Mqtt() {
-        mutableMqttClientMap = new MutableLiveData<>();
         mutableSubscriptionMap = new MutableLiveData<>();
         mutableSubscribedMessagesList = new MutableLiveData<>();
     }
@@ -53,20 +54,19 @@ public class Mqtt {
         return instance;
     }
 
-    public MutableLiveData<Map<String, MqttAndroidClient>> getMutableMqttClientMap() {
-        return mutableMqttClientMap;
+
+    public MutableLiveData<List<ClientHolder>> getClients() {
+        return clients;
     }
 
-    public void setMutableMqttClientMap(Map<String, MqttAndroidClient> clientList) {
-        mutableMqttClientMap.postValue(clientList);
-    }
 
-    public void addClientToMap(MqttAndroidClient client) {
-        Map<String, MqttAndroidClient> clientList = mutableMqttClientMap.getValue();
+
+    public void addClient(MqttAndroidClient client) {
+        List<ClientHolder> clientList = clients.getValue();
         if (clientList == null) {
-            clientList = new HashMap<>();
+            clientList = new ArrayList<>();
         }
-        clientList.put(client.getClientId(), client);
+        clientList.add(new ClientHolder()client.getClientId(), client);
         mutableMqttClientMap.postValue(clientList);
     }
 
