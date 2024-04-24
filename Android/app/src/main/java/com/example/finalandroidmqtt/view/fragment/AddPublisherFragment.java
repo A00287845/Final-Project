@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
+import com.example.finalandroidmqtt.pojo.ClientHolder;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 
@@ -105,11 +106,10 @@ public class AddPublisherFragment extends DialogFragment {
 
     private List<String> getSubscriptionsForClient(String clientId) {
         List<String> subscriptions = new ArrayList<>();
-        Map<String, Set<String>> subscriptionMap = application.getMqtt().getMutableSubscriptionMap().getValue();
-        if (subscriptionMap != null && subscriptionMap.containsKey(clientId)) {
-            subscriptions.addAll(Objects.requireNonNull(subscriptionMap.get(clientId)));
-        }
-        return subscriptions;
+        ClientHolder clientHolder =  application.getMqtt().getClientHolderFromListByName(clientId, Objects.requireNonNull(application.getMqtt().getClients().getValue()));
+
+
+        return new ArrayList<>(clientHolder.getSubscriptions());
     }
 
     private void linkSensorToTopic(String sensorName, String topic) {

@@ -24,16 +24,16 @@ public class MqttApplication extends Application {
         Log.d("MqttApplication", "onCreate: ");
         super.onCreate();
         instance = this;
-        mqttInstance = Mqtt.getInstance();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensorHandler = new MqttApplication.SensorHandler();
         sensorHandler.initializeSensors();
+        mqttInstance = Mqtt.getInstance(sensorHandler);
     }
 
 
     public Mqtt getMqtt() {
         if (mqttInstance == null) {
-            mqttInstance = Mqtt.getInstance();
+            mqttInstance = Mqtt.getInstance(sensorHandler);
         }
         return mqttInstance;
     }

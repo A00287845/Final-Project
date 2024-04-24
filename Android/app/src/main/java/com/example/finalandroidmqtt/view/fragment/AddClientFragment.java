@@ -15,6 +15,8 @@ import androidx.fragment.app.DialogFragment;
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 
+import java.util.Objects;
+
 public class AddClientFragment extends DialogFragment {
     private MqttApplication application;
     private View dialogView;
@@ -26,8 +28,8 @@ public class AddClientFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        application = (MqttApplication) getActivity().getApplication();
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        application = (MqttApplication) requireActivity().getApplication();
 
         dialogView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_client, null);
 

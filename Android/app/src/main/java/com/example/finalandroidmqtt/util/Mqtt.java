@@ -2,11 +2,15 @@ package com.example.finalandroidmqtt.util;
 
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+
+import com.example.finalandroidmqtt.MqttApplication;
+import com.example.finalandroidmqtt.pojo.ClientHolder;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -20,128 +24,108 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 public class Mqtt {
     private static volatile Mqtt instance;
-    private final MutableLiveData<Map<String, MqttAndroidClient>> mutableMqttClientMap;
-    private final MutableLiveData<Map<String, Set<String>>> mutableSubscriptionMap;
-    private final MutableLiveData<List<String>> mutableSubscribedMessagesList;
-    private final MutableLiveData<Map<String, List<Pair<Sensor, String>>>> sensorTopics = new MutableLiveData<>();
-    private final Map<String, List<Pair<Sensor, String>>> clientSensors = new HashMap<>();
+    private final MutableLiveData<List<ClientHolder>> clients = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> mutableSubscribedMessagesList = new MutableLiveData<>();
 
+    private MutableLiveData<Boolean> sensorsActive = new MutableLiveData<>();
 
-    private Mqtt() {
-        mutableMqttClientMap = new MutableLiveData<>();
-        mutableSubscriptionMap = new MutableLiveData<>();
-        mutableSubscribedMessagesList = new MutableLiveData<>();
+    private MqttApplication.SensorHandler sensorHandler;
+
+    private Mqtt(){}
+
+    private Mqtt(MqttApplication.SensorHandler sensorHandler) {
+        this.sensorHandler = sensorHandler;
     }
 
-    public static Mqtt getInstance() {
+    public static Mqtt getInstance(MqttApplication.SensorHandler sensorHandler) {
         if (instance == null) {
             synchronized (Mqtt.class) {
                 if (instance == null) {
-                    instance = new Mqtt();
+                    instance = new Mqtt(sensorHandler);
                 }
             }
         }
         return instance;
     }
 
-    public MutableLiveData<Map<String, MqttAndroidClient>> getMutableMqttClientMap() {
-        return mutableMqttClientMap;
+    public MutableLiveData<List<ClientHolder>> getClients() {
+        checkActive();
+        Log.d("MQTT", "getClients returning " + clients.getValue());
+        return clients;
     }
 
-    public void setMutableMqttClientMap(Map<String, MqttAndroidClient> clientList) {
-        mutableMqttClientMap.postValue(clientList);
-    }
-
-    public void addClientToMap(MqttAndroidClient client) {
-        Map<String, MqttAndroidClient> clientList = mutableMqttClientMap.getValue();
+    public void addClient(MqttAndroidClient client) {
+        List<ClientHolder> clientList = clients.getValue();
         if (clientList == null) {
-            clientList = new HashMap<>();
+            clientList = new ArrayList<>();
         }
-        clientList.put(client.getClientId(), client);
-        mutableMqttClientMap.postValue(clientList);
+        clientList.add(new ClientHolder(client.getClientId(), client));
+        clients.postValue(clientList);
     }
 
-    public void removeClientByNameFromMap(String clientName) {
+    public void removeClientByNameFromList(String clientName) {
         Log.d("EOGHAN", "Mqtt removeClientByNameFromMap: client name " + clientName);
         // Early retrieval with null checks
-        Map<String, MqttAndroidClient> clientMap = mutableMqttClientMap.getValue();
-        Map<String, Set<String>> subscriptionMap = mutableSubscriptionMap.getValue();
-        if (clientMap == null) {
-            Log.d("EOGHAN", "Mqtt removeClientByNameFromMap a map is null");
-
-            return; // No action needed if either map is null
-        }
-
-        // Attempt to remove the client and disconnect if present
-        MqttAndroidClient client = clientMap.remove(clientName);
-        if (client != null) {
-            try {
-                Log.d("EOGHAN", "Mqtt removeClientByNameFromMap disconnecting client");
-
-                client.disconnect(); // Disconnect the client if it was found
-            } catch (MqttException e) {
-                // Consider logging the exception instead of throwing a runtime exception
-                Log.e("removeClientByName", "Error disconnecting client: " + clientName, e);
-                // Optionally, handle the error more gracefully or rethrow as a checked exception
-            }
-        }
-        mutableMqttClientMap.postValue(clientMap);
-
-        if (subscriptionMap == null) {
+        List<ClientHolder> clientList = clients.getValue();
+        if (clientList == null) {
+            Log.d("EOGHAN", "Mqtt removeClientByNameFromMap a list is null");
             return;
         }
 
-        // Remove the subscription associated with the clientName if present
-        subscriptionMap.remove(clientName);
+        ClientHolder foundClient = getClientHolderFromListByName(clientName, clientList);
 
-        // Post the updated maps back to their respective LiveData or observable fields
-        mutableSubscriptionMap.postValue(subscriptionMap);
+
+        try {
+            foundClient.getClient().disconnect();
+        } catch (MqttException me) {
+            Log.e("removeClientByName", "Error disconnecting client: " + clientName, me);
+
+        }
+        clientList.remove(foundClient);
+
+
+        clients.postValue(clientList);
     }
 
-    public MutableLiveData<Map<String, Set<String>>> getMutableSubscriptionMap() {
-        return mutableSubscriptionMap;
+    public ClientHolder getClientHolderFromListByName(String clientName, List<ClientHolder> clientList) {
+        ClientHolder foundClient = null;
+        for (ClientHolder clientHolder : clientList) {
+            if (clientHolder.getName().equalsIgnoreCase(clientName)) {
+                foundClient = clientHolder;
+            }
+        }
+        if (foundClient == null) {
+            Log.d("EOGHAN", "Mqtt getClientFromListByName client not found");
+            return null;
+        }
+        return foundClient;
     }
 
-    public void setMutableSubscriptionMap(Map<String, Set<String>> subscriptionMap) {
-        mutableSubscriptionMap.postValue(subscriptionMap);
-    }
 
-    public void addSubscriptionToList(String client, String subscription) {
-        Log.d("Eoghan", "MqttApplication addSubscriptionToList called with client: " + client + ", subscription: " + subscription);
-
-        Map<String, Set<String>> subscriptionMap = mutableSubscriptionMap.getValue();
-        Log.d("Eoghan", "MqttApplication Current subscriptionMap retrieved. Null? " + (subscriptionMap == null));
-
-        if (subscriptionMap == null) {
-            subscriptionMap = new HashMap<>();
-            Log.d("Eoghan", "MqttApplication subscriptionMap was null, initialized new HashMap.");
+    public void addSubscriptionToList(String clientName, String subscription) {
+        Log.d("Eoghan", "MqttApplication addSubscriptionToList called with client: " + clientName + ", subscription: " + subscription);
+        List<ClientHolder> clientList = clients.getValue();
+        if (clientList == null) {
+            clientList = new ArrayList<>();
         }
 
-        Set<String> clientSubs = subscriptionMap.get(client);
-        Log.d("Eoghan", "MqttApplication Client subscriptions retrieved for client '" + client + "'. Null? " + (clientSubs == null));
+        ClientHolder foundClient = getClientHolderFromListByName(clientName, clientList);
+
+        Set<String> clientSubs = foundClient.getSubscriptions();
 
         if (clientSubs == null) {
             clientSubs = new HashSet<>();
-            Log.d("Eoghan", "MqttApplication clientSubs was null, initialized new HashSet.");
         }
-
         clientSubs.add(subscription);
-        Log.d("Eoghan", "MqttApplication Added subscription '" + subscription + "' to clientSubs. Total subs now: " + clientSubs.size());
-
-        subscriptionMap.put(client, clientSubs);
-        Log.d("Eoghan", "MqttApplication Updated subscriptionMap with client '" + client + "' subscriptions. Total clients now: " + subscriptionMap.size());
-
-        mutableSubscriptionMap.postValue(subscriptionMap);
-        Log.d("Eoghan", "MqttApplication Posted updated subscriptionMap to mutableSubscriptionMap.");
+        Log.d("MQTT", " posting client value after subscribing foundClient : " + foundClient);
+        clients.postValue(clientList);
     }
 
     public void addSubbedMessageToList(String topic, String message) {
@@ -174,7 +158,7 @@ public class Mqtt {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.d("Eoghan", "Mqtt setupBroker onSuccess: Adding " + mqttAndroidClient.getClientId() + " to connected clients list.");
-                    addClientToMap(mqttAndroidClient);
+                    addClient(mqttAndroidClient);
                 }
 
                 @Override
@@ -196,7 +180,7 @@ public class Mqtt {
             @Override
             public void connectionLost(Throwable cause) {
                 Log.e("EOGHAN", "Mqtt getMqttAndroidClient connectionLost: client: " + mqttAndroidClient.getClientId(), cause);
-                removeClientByNameFromMap(mqttAndroidClient.getClientId());
+                removeClientByNameFromList(mqttAndroidClient.getClientId());
             }
 
             @Override
@@ -216,7 +200,7 @@ public class Mqtt {
     public void subscribeToTopic(String topic, MqttAndroidClient client) {
         Log.d("Eoghan", "Attempting to subscribe to topic: " + topic + " with client ID: " + client.getClientId());
 
-        int qos = 1; // at least once delivery
+        int qos = 1;
         try {
             IMqttToken subToken = client.subscribe(topic, qos);
             subToken.setActionCallback(new IMqttActionListener() {
@@ -237,23 +221,23 @@ public class Mqtt {
     }
 
 
-
     public void publishMessagesForClients() {
-        if (mutableMqttClientMap == null || mutableMqttClientMap.getValue() == null) {
+        if (clients.getValue() == null) {
             Log.e("Eoghan", "Client map is null or uninitialized.");
             return;
         }
+        for (int i = 0; i < clients.getValue().size(); i++) {
+            String clientName = clients.getValue().get(i).getName();
+            List<Pair<Sensor, String>> sensorTopics = clients.getValue().get(i).getSensorTopics();
 
-        for (String clientName : mutableMqttClientMap.getValue().keySet()) {
-            List<Pair<Sensor, String>> sensorList = clientSensors.get(clientName);
-            if (sensorList != null) {
-                for (Pair<Sensor, String> sensorTopicPair : sensorList) {
+            if (sensorTopics != null) {
+                for (Pair<Sensor, String> sensorTopicPair : sensorTopics) {
                     Sensor sensor = sensorTopicPair.first;
                     String topic = sensorTopicPair.second;
                     String payload = getSensorData(sensor);
-                    MqttAndroidClient client = mutableMqttClientMap.getValue().get(clientName);
+                    MqttAndroidClient client = getClientHolderFromListByName(clientName, clients.getValue()).getClient();
                     if (client != null) {
-                        Log.d("Eoghan", "Publishing message for client: " + clientName + " on topic: " + topic);
+                        Log.d("Eoghan", "Publishing message: \"" + payload + "\" for client: " + clientName + " on topic: " + topic);
                         publishMessage(client, topic, payload, 1, false);
                     } else {
                         Log.e("Eoghan", "MQTT client for " + clientName + " is null.");
@@ -265,6 +249,15 @@ public class Mqtt {
         }
     }
 
+    public void publishMessage(String topic, String payload){
+        if(clients.getValue()== null){
+            return;
+        }
+        if(clients.getValue().isEmpty()){
+            return;
+        }
+        publishMessage(clients.getValue().get(0).getClient(), topic, payload, 2, false);
+    }
 
     private void publishMessage(MqttAndroidClient client, String topic, String payload, int qos, boolean retained) {
         try {
@@ -290,30 +283,48 @@ public class Mqtt {
     }
 
     private String getSensorData(Sensor sensor) {
-        // Return a string representation of sensor data.
-//        return sensor.getData(); // Assume getData returns the current data as a String.
+        if (sensor == null) {
+            return "Sensor not available";
+        }
 
-        return sensor.getName() + " TEST";
+        // Check which type of sensor is passed and fetch the appropriate last known value
+        if (sensor.getType() == Sensor.TYPE_PROXIMITY) {
+            return sensor.getName() + ": " + sensorHandler.getLastProximityValue();
+        } else if (sensor.getType() == Sensor.TYPE_LIGHT) {
+            return sensor.getName() + ": " + sensorHandler.getLastLightValue();
+        } else {
+            return sensor.getName() + ": Sensor type not supported";
+        }
     }
 
 
     public void associateClientWithEndpoint(String clientName, Sensor sensor, String publishTopic) {
-        // Retrieve the list of sensor-topic pairs for the client
-        List<Pair<Sensor, String>> sensorList = clientSensors.get(clientName);
-
-        // If no list exists, create one and put it in the map
-        if (sensorList == null) {
-            sensorList = new ArrayList<>();
-            clientSensors.put(clientName, sensorList);
-        }
-
-        // Add the new sensor and topic pair to the list
+        Log.d("MQTT", "associateClientWithEndpoint clientName: " + clientName + " sensor: " + sensor + " publishTopic: ");
+        List<ClientHolder> clientList = clients.getValue();
+        ClientHolder thisClient = getClientHolderFromListByName(clientName, Objects.requireNonNull(clientList));
+        List<Pair<Sensor, String>> sensorList = thisClient.getSensorTopics();
         sensorList.add(new Pair<>(sensor, publishTopic));
-        Log.d("MQTT", " ADDING TO MUTABLE LIST " + clientSensors);
-        sensorTopics.postValue(clientSensors);
+        clients.postValue(clientList);
     }
 
-    public MutableLiveData<Map<String, List<Pair<Sensor, String>>>> getSensorTopics() {
-        return sensorTopics;
+    public MutableLiveData<Boolean> getSensorActive() {
+        return sensorsActive;
+    }
+
+    public void checkActive() {
+        if (clients.getValue() == null) {
+            return;
+        }
+        boolean active = false;
+        for (ClientHolder clientHolder : clients.getValue()) {
+            if (!clientHolder.getSensorTopics().isEmpty()) {
+                active = true;
+                break;
+            }
+        }
+        if (active == Boolean.TRUE.equals(sensorsActive.getValue())){
+            return;
+        }
+        sensorsActive.postValue(active);
     }
 }
