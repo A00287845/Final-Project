@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
+import com.example.finalandroidmqtt.pojo.ClientHolder;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 
@@ -31,7 +32,7 @@ public class ManageSubscriptionsFragment extends Fragment {
     private Spinner dropDownItemsSpinner;
     private Button addSubscriptionButton, addSensorButton;
     private ArrayAdapter<String> dropDownAdapter;
-
+    private MqttApplication application;
     private String currentSelectedClient;
 
     public ManageSubscriptionsFragment() {
@@ -55,9 +56,9 @@ public class ManageSubscriptionsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MqttApplication application = (MqttApplication) requireContext().getApplicationContext();
-        setUpObservation(application);
-        handleDropdown(application);
+        application = (MqttApplication) requireContext().getApplicationContext();
+        setUpObservation();
+        handleDropdown();
         addSubscriptionButton = requireActivity().findViewById(R.id.addSubscriptionOpenFragmentButton);
         addSensorButton = requireActivity().findViewById(R.id.addTopicOpenFragmentButton);
 
@@ -66,55 +67,48 @@ public class ManageSubscriptionsFragment extends Fragment {
             dialogFragment.show(getChildFragmentManager(), "Add subscription");
         });
 
-        addSensorButton.setOnClickListener( v-> {
+        addSensorButton.setOnClickListener(v -> {
             AddPublisherFragment dialogFragment = AddPublisherFragment.newInstance(currentSelectedClient);
             dialogFragment.show(getChildFragmentManager(), "addSensorTopic");
         });
     }
 
 
-
-    private void setUpObservation(MqttApplication application) {
-        application.getMqtt().getMutableMqttClientMap().observe(getViewLifecycleOwner(), clients -> {
+    private void setUpObservation() {
+        application.getMqtt().getClients().observe(getViewLifecycleOwner(), clients -> {
             if (clients != null) {
-                updateUi(application);
+                updateUi(clients);
             } else {
                 Log.d("Eoghan", "ManageClientsFragment Clients is null");
             }
         });
 
-        application.getMqtt().getMutableSubscriptionMap().observe(getViewLifecycleOwner(), subscriptions -> {
-            if (subscriptions != null) {
-                updateUi(application);
-            }
-        });
     }
 
-    private void updateUi(MqttApplication application){
+    private void updateUi(List<ClientHolder> clientHolderList) {
 
         if (addSubscriptionButton == null) {
             return;
         }
 
-        if (!application.getMqtt().getMutableMqttClientMap().getValue().isEmpty()) {
+        if (!clientHolderList.isEmpty()) {
             addSubscriptionButton.setVisibility(View.VISIBLE);
             addSensorButton.setVisibility(View.VISIBLE);
             dropDownItemsSpinner.setVisibility(View.VISIBLE);
-            handleDropdown(application);
+            handleDropdown();
         } else {
             addSubscriptionButton.setVisibility(View.GONE);
             dropDownItemsSpinner.setVisibility(View.GONE);
         }
     }
 
-    private void handleDropdown(MqttApplication application) {
-        Log.d("EOGHAN", "ManageClientsFragment handleDropdown:");
+    private void handleDropdown() {
+        Log.d("EOGHAN", "ManageSubscriptionsFragment handleDropdown:");
 
         List<String> dropdownItems = new ArrayList<>();
 
-
         if (dropDownItemsSpinner == null) { // initialize case
-            Log.d("EOGHAN", "ManageClientsFragment handleDropdown: Initialize case");
+            Log.d("EOGHAN", "ManageSubscriptionsFragment handleDropdown: Initialize case");
             dropDownItemsSpinner = requireActivity().findViewById(R.id.clientDropDownSpinner);
 
             dropDownAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, dropdownItems);
@@ -141,27 +135,62 @@ public class ManageSubscriptionsFragment extends Fragment {
 
         } else { //refresh case
 
-            Map<String, MqttAndroidClient> clientMap = application.getMqtt().getMutableMqttClientMap().getValue();
-            if (clientMap == null) {
-                Log.d("EOGHAN", "ManageClientsFragment handleDropdown: clientMap is null");
+            // Retrieving the list of clients
+            List<ClientHolder> clientList = application.getMqtt().getClients().getValue();
+
+            // Check if the client list is null or empty and handle accordingly
+            if (clientList == null) {
+                Log.d("EOGHAN", "ManageSubscriptionsFragment handleDropdown: clientList is null");
+                return;
+            }
+            if (clientList.isEmpty()) {
+                Log.d("EOGHAN", "ManageSubscriptionsFragment handleDropdown: clientList is empty");
                 return;
             }
 
-            if (clientMap.isEmpty()) {
-                Log.d("EOGHAN", "ManageClientsFragment handleDropdown: clientMap is empty");
-
-                return;
+            // Populate the dropdown with names from the client holders
+            for (ClientHolder holder : clientList) {
+                if (holder != null) {
+                    String name = holder.getName(); // Using getName() to get the name for the dropdown
+                    if (name != null && !name.isEmpty()) {
+                        dropdownItems.add(name);
+                    } else {
+                        Log.d("EOGHAN", "ManageSubscriptions handleDropdown: found empty or null name");
+                    }
+                } else {
+                    Log.d("EOGHAN", "ManageSubscriptionsFragment handleDropdown: null holder encountered");
+                }
             }
 
+            Log.d("EOGHAN", "ManageSubscriptionsFragment handleDropdown: refresh case");
 
-            for (MqttAndroidClient client : clientMap.values()) {
-                dropdownItems.add(client.getClientId());
-            }
-
-            Log.d("EOGHAN", "ManageClientsFragment handleDropdown: refresh case");
-
+// Update the dropdown adapter
             dropDownAdapter.clear();
             dropDownAdapter.addAll(dropdownItems);
+
+//            List<ClientHolder> clientList = application.getMqtt().getClients().getValue();
+//
+//            Map<String, MqttAndroidClient> clientMap = application.getMqtt().getMutableMqttClientMap().getValue();
+//            if (clientMap == null) {
+//                Log.d("EOGHAN", "ManageClientsFragment handleDropdown: clientMap is null");
+//                return;
+//            }
+//
+//            if (clientMap.isEmpty()) {
+//                Log.d("EOGHAN", "ManageClientsFragment handleDropdown: clientMap is empty");
+//
+//                return;
+//            }
+//
+//
+//            for (MqttAndroidClient client : clientMap.values()) {
+//                dropdownItems.add(client.getClientId());
+//            }
+//
+//            Log.d("EOGHAN", "ManageClientsFragment handleDropdown: refresh case");
+//
+//            dropDownAdapter.clear();
+//            dropDownAdapter.addAll(dropdownItems);
         }
 
 

@@ -18,8 +18,6 @@ import com.example.finalandroidmqtt.util.RepeatedTaskLooper;
 import com.example.finalandroidmqtt.view.fragment.ManageClientsFragment;
 import com.example.finalandroidmqtt.view.fragment.ManageSubscriptionsFragment;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
-
 public class MainActivity extends AppCompatActivity {
     private RepeatedTaskLooper looper;
     private MqttApplication application;
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            Log.d("Eoghan", "MainActivity onApplyWindowInsets: Applied window insets padding. Left: " + systemBars.left + ", Top: " + systemBars.top + ", Right: " + systemBars.right + ", Bottom: " + systemBars.bottom);
             return insets;
         });
 
@@ -55,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpObservation() {
-        application.getMqtt().getSensorTopics().observe(this, topicPublishes -> {
-            Log.d("Eoghan", "MainActivity sensortopics observed");
-            if (topicPublishes != null) {
-                if (topicPublishes.isEmpty()) {
+        application.getMqtt().getSensorActive().observe(this, active -> {
+            Log.d("Eoghan", "MainActivity sensorActive observed");
+            if (active != null) {
+                if (!active) {
                     if (looper != null) {
                         looper.stop();
                     }
@@ -67,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
                 looper = new RepeatedTaskLooper(this);
                 looper.start();
-
             }
         });
     }

@@ -5,16 +5,24 @@ import android.util.Pair;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ClientHolder {
     private String name;
     private MqttAndroidClient client;
-    private Set<String> subscriptions;
-    List<Pair<Sensor, String>> sensorTopics;
+    private Set<String> subscriptions = new HashSet<>();
+    List<Pair<Sensor, String>> sensorTopics = new ArrayList<>();
+
+
 
     public ClientHolder(){}
+    public ClientHolder(String clientName, MqttAndroidClient client){
+        this.name = clientName;
+        this.client = client;
+    }
 
     public String getName() {
         return name;
@@ -55,8 +63,18 @@ public class ClientHolder {
             sb.append(pair.first.getName());
             sb.append(" topic ");
             sb.append(pair.second);
-            sb.append('\n');
+            sb.append("\n\n");
         }
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "ClientHolder{" +
+                "name='" + name + '\'' +
+                ", client=" + client +
+                ", subscriptions=" + subscriptions +
+                ", sensorTopics=" + sensorTopics +
+                '}';
     }
 }

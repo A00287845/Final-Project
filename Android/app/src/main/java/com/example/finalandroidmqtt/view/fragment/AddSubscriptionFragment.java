@@ -87,18 +87,17 @@ public class AddSubscriptionFragment extends DialogFragment {
                 return;
             }
 
-            if (application.getMqtt().getMutableMqttClientMap().getValue() == null) {
-                Toast.makeText(requireActivity(), "Mutable client map is null", Toast.LENGTH_SHORT).show();
+            if (application.getMqtt().getClients().getValue() == null) {
+                Toast.makeText(requireActivity(), "Clients list is null", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (application.getMqtt().getMutableMqttClientMap().getValue().get(selectedClientId) == null) {
+            if (application.getMqtt().getClientHolderFromListByName(selectedClientId, application.getMqtt().getClients().getValue()) == null) {
                 Toast.makeText(requireActivity(), "Value is null", Toast.LENGTH_SHORT).show();
-
                 return;
             }
 
-            MqttAndroidClient selectedClient = application.getMqtt().getMutableMqttClientMap().getValue().get(selectedClientId);
+            MqttAndroidClient selectedClient = application.getMqtt().getClientHolderFromListByName(selectedClientId, application.getMqtt().getClients().getValue()).getClient();
 
             assert selectedClient != null;
             application.getMqtt().subscribeToTopic(newSubTopic, selectedClient);
@@ -107,5 +106,4 @@ public class AddSubscriptionFragment extends DialogFragment {
     }
 
 
-    // You can customize the style and dimensions of the dialog in onCreateDialog if needed
 }
