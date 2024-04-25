@@ -14,11 +14,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
+import com.example.finalandroidmqtt.pojo.ClientHolder;
 import com.example.finalandroidmqtt.util.RepeatedTaskLooper;
+
+import java.util.Objects;
 
 
 public class MessagePublishActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +41,6 @@ public class MessagePublishActivity extends AppCompatActivity {
         transaction.replace(R.id.mainLayout, fragment);
         transaction.commit();
     }
-
-
 
 
 }

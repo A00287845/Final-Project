@@ -7,4 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".view.activity.sensors.SensorsActivity">
 
+    <Button
+        android:id="@+id/addSensorTopicButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Sensor to Topic "
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sensorSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sensors on/off   "
+        android:layout_marginTop="50dp"
+        android:textSize="30dp"
+        app:switchMinWidth="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addSensorTopicButt" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

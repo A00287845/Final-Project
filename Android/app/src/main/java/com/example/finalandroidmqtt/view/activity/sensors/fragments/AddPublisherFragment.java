@@ -1,10 +1,11 @@
-package com.example.finalandroidmqtt.view.fragment;
+package com.example.finalandroidmqtt.view.activity.sensors.fragments;
 
 import android.app.Dialog;
 import android.hardware.Sensor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,13 +21,9 @@ import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 import com.example.finalandroidmqtt.pojo.ClientHolder;
 
-import info.mqtt.android.service.MqttAndroidClient;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 public class AddPublisherFragment extends DialogFragment {
     private static final String ARG_SELECTED_CLIENT_ID = "selectedClientId";
@@ -34,6 +31,7 @@ public class AddPublisherFragment extends DialogFragment {
     private View dialogView;
     private Spinner sensorSpinner;
     private EditText subscriptionEditText;
+    ArrayAdapter<String> sensorAdapter;
 
     public static AddPublisherFragment newInstance(String clientId) {
         AddPublisherFragment fragment = new AddPublisherFragment();
@@ -53,13 +51,13 @@ public class AddPublisherFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         application = (MqttApplication) requireActivity().getApplication();
 
-        dialogView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_publisher, null);
+        dialogView = getLayoutInflater().inflate(R.layout.fragment_add_publisher, null);
 
         sensorSpinner = dialogView.findViewById(R.id.sensorSpinner);
         subscriptionEditText = dialogView.findViewById(R.id.subscriptionEditText);
 
         // Load sensor names
-        ArrayAdapter<String> sensorAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, getSensorNames());
+        sensorAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, getSensorNames());
         sensorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sensorSpinner.setAdapter(sensorAdapter);
 
@@ -78,22 +76,47 @@ public class AddPublisherFragment extends DialogFragment {
         if (dialog == null) {
             return;
         }
+        final String[] topic = new String[1];
+        topic[0] = "no topic";
+        sensorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final String sensorName = (String) sensorAdapter.getItem(position);
+                setHintsAndTopic(topic, sensorName);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
         positiveButton.setOnClickListener(view -> {
             String selectedSensor = sensorSpinner.getSelectedItem().toString();
-            String topic = subscriptionEditText.getText().toString().trim();
+            String finalTopic = subscriptionEditText.getText().toString().trim();
 
-            if (selectedSensor.isEmpty() || topic.isEmpty()) {
-                Toast.makeText(requireActivity(), "Please enter both a sensor and a subscription topic.", Toast.LENGTH_SHORT).show();
+            if (selectedSensor.isEmpty()) {
+                Toast.makeText(requireActivity(), "Please select a sensor and a subscription topic.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Assuming you have a method to handle linking the sensor to the topic
-            linkSensorToTopic(selectedSensor, topic);
-            Toast.makeText(requireActivity(), "Linked " + selectedSensor + " with " + topic, Toast.LENGTH_SHORT).show();
+
+            linkSensorToTopic(selectedSensor, topic[0]);
+            Toast.makeText(requireActivity(), "Linked " + selectedSensor + " with " + finalTopic, Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
+    }
+
+    private void setHintsAndTopic(String[] topic, String sensorName) {
+        if (sensorName.contains("Proximity")) {
+            topic[0] = "a00287845/device/android/sensors/proximity";
+            subscriptionEditText.setHint(topic[0]);
+        } else if (sensorName.contains("Light")) {
+            topic[0] = "a00287845/device/android/sensors/light";
+            subscriptionEditText.setHint(topic[0]);
+        }
     }
 
     private List<String> getSensorNames() {
@@ -106,7 +129,7 @@ public class AddPublisherFragment extends DialogFragment {
 
     private List<String> getSubscriptionsForClient(String clientId) {
         List<String> subscriptions = new ArrayList<>();
-        ClientHolder clientHolder =  application.getMqtt().getClientHolderFromListByName(clientId, Objects.requireNonNull(application.getMqtt().getClients().getValue()));
+        ClientHolder clientHolder = application.getMqtt().getClientHolderFromListByName(clientId, Objects.requireNonNull(application.getMqtt().getClients().getValue()));
 
 
         return new ArrayList<>(clientHolder.getSubscriptions());
@@ -114,12 +137,12 @@ public class AddPublisherFragment extends DialogFragment {
 
     private void linkSensorToTopic(String sensorName, String topic) {
         Sensor toLink = null;
-        for(Sensor sensor: application.getSensorHandler().getSensorList()){
-            if (sensor.getName().equalsIgnoreCase(sensorName)){
+        for (Sensor sensor : application.getSensorHandler().getSensorList()) {
+            if (sensor.getName().equalsIgnoreCase(sensorName)) {
                 toLink = sensor;
             }
         }
-        if(toLink == null){
+        if (toLink == null) {
             return;
         }
         application.getInstance().getMqtt().associateClientWithEndpoint((String) requireArguments().get(ARG_SELECTED_CLIENT_ID), toLink, topic);

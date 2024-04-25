@@ -1,6 +1,5 @@
-package com.example.finalandroidmqtt.view.fragment;
+package com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments;
 
-import android.hardware.Sensor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +16,9 @@ import android.view.ViewGroup;
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 import com.example.finalandroidmqtt.pojo.ClientHolder;
-
-import info.mqtt.android.service.MqttAndroidClient;
+import com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments.AddClientFragment;
 
 import java.util.List;
-import java.util.Map;
 
 
 public class ManageClientsFragment extends Fragment {

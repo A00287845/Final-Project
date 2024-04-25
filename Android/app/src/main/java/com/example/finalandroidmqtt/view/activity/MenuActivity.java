@@ -10,8 +10,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.finalandroidmqtt.R;
+import com.example.finalandroidmqtt.view.activity.clientsandsubs.MainActivity;
 import com.example.finalandroidmqtt.view.activity.datavisualiser.DataVisualiserActivity;
 import com.example.finalandroidmqtt.view.activity.messagepublish.MessagePublishActivity;
+import com.example.finalandroidmqtt.view.activity.sensors.SensorsActivity;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -36,6 +38,10 @@ public class MenuActivity extends AppCompatActivity {
 
         findViewById(R.id.openMessagePubAct).setOnClickListener(v->{
             startActivity(new Intent(MenuActivity.this, MessagePublishActivity.class));
+        });
+
+        findViewById(R.id.openSensorsButt).setOnClickListener(v->{
+            startActivity(new Intent(MenuActivity.this, SensorsActivity.class));
         });
     }
 }

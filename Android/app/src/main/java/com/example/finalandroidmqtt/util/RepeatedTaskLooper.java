@@ -6,8 +6,6 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.finalandroidmqtt.MqttApplication;
-import com.example.finalandroidmqtt.view.activity.MainActivity;
-import com.example.finalandroidmqtt.view.activity.messagepublish.MessagePublishActivity;
 
 public class RepeatedTaskLooper {
     private Handler handler;
@@ -30,7 +28,6 @@ public class RepeatedTaskLooper {
 
     private void performTask(AppCompatActivity activity) {
         // The task to be executed every 500 milliseconds
-
         System.out.println("Task executed");
         MqttApplication application = (MqttApplication) activity.getApplication();
         application.getMqtt().publishMessagesForClients();

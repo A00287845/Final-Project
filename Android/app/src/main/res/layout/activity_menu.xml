@@ -36,7 +36,7 @@
         android:id="@+id/openMainActButt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Main"
+        android:text="Clients and Subscriptions"
         android:backgroundTint="#676666"
         android:textColor="@color/white"
         android:layout_marginTop="50dp"
@@ -55,4 +55,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/openMainActButt" />
+
+    <Button
+        android:id="@+id/openSensorsButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sensors"
+        android:backgroundTint="#676666"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/openMessagePubAct" />
 </androidx.constraintlayout.widget.ConstraintLayout>

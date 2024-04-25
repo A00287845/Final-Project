@@ -1,4 +1,4 @@
-package com.example.finalandroidmqtt.view.fragment;
+package com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments;
 
 import android.os.Bundle;
 
@@ -19,18 +19,16 @@ import android.widget.Toast;
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 import com.example.finalandroidmqtt.pojo.ClientHolder;
-
-import info.mqtt.android.service.MqttAndroidClient;
+import com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments.AddSubscriptionFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class ManageSubscriptionsFragment extends Fragment {
 
     private Spinner dropDownItemsSpinner;
-    private Button addSubscriptionButton, addSensorButton;
+    private Button addSubscriptionButton;
     private ArrayAdapter<String> dropDownAdapter;
     private MqttApplication application;
     private String currentSelectedClient;
@@ -60,16 +58,10 @@ public class ManageSubscriptionsFragment extends Fragment {
         setUpObservation();
         handleDropdown();
         addSubscriptionButton = requireActivity().findViewById(R.id.addSubscriptionOpenFragmentButton);
-        addSensorButton = requireActivity().findViewById(R.id.addTopicOpenFragmentButton);
 
         addSubscriptionButton.setOnClickListener(v -> {
             AddSubscriptionFragment dialogFragment = AddSubscriptionFragment.newInstance(currentSelectedClient);
             dialogFragment.show(getChildFragmentManager(), "Add subscription");
-        });
-
-        addSensorButton.setOnClickListener(v -> {
-            AddPublisherFragment dialogFragment = AddPublisherFragment.newInstance(currentSelectedClient);
-            dialogFragment.show(getChildFragmentManager(), "addSensorTopic");
         });
     }
 
@@ -93,7 +85,6 @@ public class ManageSubscriptionsFragment extends Fragment {
 
         if (!clientHolderList.isEmpty()) {
             addSubscriptionButton.setVisibility(View.VISIBLE);
-            addSensorButton.setVisibility(View.VISIBLE);
             dropDownItemsSpinner.setVisibility(View.VISIBLE);
             handleDropdown();
         } else {

@@ -1,4 +1,4 @@
-package com.example.finalandroidmqtt.view.fragment;
+package com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,8 +20,6 @@ import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 
 import info.mqtt.android.service.MqttAndroidClient;
-
-import java.util.Objects;
 
 public class AddSubscriptionFragment extends DialogFragment {
     private MqttApplication application;

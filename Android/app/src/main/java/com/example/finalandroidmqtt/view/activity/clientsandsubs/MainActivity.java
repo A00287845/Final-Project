@@ -1,8 +1,6 @@
-package com.example.finalandroidmqtt.view.activity;
+package com.example.finalandroidmqtt.view.activity.clientsandsubs;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
-import com.example.finalandroidmqtt.util.RepeatedTaskLooper;
-import com.example.finalandroidmqtt.view.fragment.ManageClientsFragment;
-import com.example.finalandroidmqtt.view.fragment.ManageSubscriptionsFragment;
-import com.example.finalandroidmqtt.view.activity.messagepublish.SendMessageFragment;
+import com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments.ManageClientsFragment;
+import com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments.ManageSubscriptionsFragment;
 
 public class MainActivity extends AppCompatActivity {
 

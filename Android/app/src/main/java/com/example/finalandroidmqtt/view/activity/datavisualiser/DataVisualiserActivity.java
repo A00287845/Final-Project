@@ -1,6 +1,5 @@
 package com.example.finalandroidmqtt.view.activity.datavisualiser;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -13,11 +12,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.finalandroidmqtt.R;
-import com.example.finalandroidmqtt.view.activity.MenuActivity;
 import com.example.finalandroidmqtt.view.activity.datavisualiser.fragments.GyroscopeVisualiserFragment;
 import com.example.finalandroidmqtt.view.activity.datavisualiser.fragments.HumidityVisualiserFragment;
 import com.example.finalandroidmqtt.view.activity.datavisualiser.fragments.TemperatureAndHumidityVisualiserFragment;
-import com.example.finalandroidmqtt.view.fragment.ManageClientsFragment;
 
 public class DataVisualiserActivity extends AppCompatActivity {
 

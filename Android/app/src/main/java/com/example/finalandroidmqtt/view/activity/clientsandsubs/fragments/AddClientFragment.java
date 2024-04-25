@@ -1,4 +1,4 @@
-package com.example.finalandroidmqtt.view.fragment;
+package com.example.finalandroidmqtt.view.activity.clientsandsubs.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;

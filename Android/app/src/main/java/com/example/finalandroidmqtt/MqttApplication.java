@@ -55,6 +55,7 @@ public class MqttApplication extends Application {
 
         public void startProximitySensor() {
             if (proximitySensor != null) {
+                Log.d("MqttApplication", "starting prox sensor");
                 sensorManager.registerListener(this, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
             } else {
                 Log.w("SensorApplication", "No Proximity Sensor found");
@@ -64,6 +65,7 @@ public class MqttApplication extends Application {
         public void stopProximitySensor() {
             if (proximitySensor != null) {
                 sensorManager.unregisterListener(this, proximitySensor);
+                lastProximityValue = 0f;
             }
         }
 
@@ -78,6 +80,7 @@ public class MqttApplication extends Application {
         public void stopLightSensor() {
             if (lightSensor != null) {
                 sensorManager.unregisterListener(this, lightSensor);
+                lastLightValue = 0f;
             }
         }
 
