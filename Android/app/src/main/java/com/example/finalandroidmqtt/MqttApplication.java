@@ -48,8 +48,8 @@ public class MqttApplication extends Application {
         public void initializeSensors() {
             proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
             lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-            startProximitySensor();
-            startLightSensor();
+//            startProximitySensor();
+//            startLightSensor();
             sensorList = Arrays.asList(proximitySensor, lightSensor);
         }
 

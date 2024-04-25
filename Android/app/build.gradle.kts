@@ -29,6 +29,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -38,8 +41,15 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation (libs.org.eclipse.paho.client.mqttv3)
-    implementation (libs.org.eclipse.paho.android.service)
+    implementation (libs.legacy.support.v4)
+    implementation (libs.paho.mqtt.android)
+    implementation (libs.speedviewlib)
+//    implementation (libs.org.eclipse.paho.android.service)
     implementation (libs.localbroadcastmanager)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+    implementation (libs.json)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

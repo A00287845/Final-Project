@@ -2,7 +2,6 @@ package com.example.finalandroidmqtt.util;
 
 import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.util.Log;
 import android.util.Pair;
 
@@ -12,7 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.pojo.ClientHolder;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
+import info.mqtt.android.service.Ack;
+import info.mqtt.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -32,9 +32,9 @@ import java.util.Set;
 public class Mqtt {
     private static volatile Mqtt instance;
     private final MutableLiveData<List<ClientHolder>> clients = new MutableLiveData<>();
-    private final MutableLiveData<List<String>> mutableSubscribedMessagesList = new MutableLiveData<>();
+    private final MutableLiveData<List<Pair<String,String>>> mutableSubscribedMessagesList = new MutableLiveData<>();
 
-    private MutableLiveData<Boolean> sensorsActive = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> sensorsActive = new MutableLiveData<>();
 
     private MqttApplication.SensorHandler sensorHandler;
 
@@ -84,7 +84,7 @@ public class Mqtt {
 
         try {
             foundClient.getClient().disconnect();
-        } catch (MqttException me) {
+        } catch (Exception me) {
             Log.e("removeClientByName", "Error disconnecting client: " + clientName, me);
 
         }
@@ -129,13 +129,13 @@ public class Mqtt {
     }
 
     public void addSubbedMessageToList(String topic, String message) {
-        List<String> messageList = mutableSubscribedMessagesList.getValue();
+        List<Pair<String,String>> messageList = mutableSubscribedMessagesList.getValue();
         if (messageList == null) {
             messageList = new ArrayList<>();
         }
         Log.d("EOGHAN", "Mqtt addSubbedMssageToList: Topic: " + topic + " Message: " + message);
 
-        messageList.add("Topic: " + topic + " Message: " + message);
+        messageList.add(new Pair<>(topic, message));
         mutableSubscribedMessagesList.postValue(messageList);
     }
 
@@ -166,7 +166,7 @@ public class Mqtt {
                     Log.e("Eoghan", "Mqtt setupBroker onFailure: ", exception);
                 }
             });
-        } catch (MqttException e) {
+        } catch (Exception e) {
             Log.e("Eoghan", "Mqtt setupBroker mqtt exception: ", e);
         }
 
@@ -174,7 +174,7 @@ public class Mqtt {
 
     @NonNull
     private MqttAndroidClient getMqttAndroidClient(Context appContext, String clientId, String serverUri) {
-        MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(appContext, serverUri, clientId);
+        MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(appContext, serverUri, clientId, Ack.AUTO_ACK);
 
         mqttAndroidClient.setCallback(new MqttCallback() {
             @Override
@@ -215,7 +215,7 @@ public class Mqtt {
                     Log.e("Eoghan", "Failed to subscribe to topic: " + topic + " with client ID: " + client.getClientId(), exception);
                 }
             });
-        } catch (MqttException e) {
+        } catch (Exception e) {
             Log.e("Eoghan", "MQTT exception while subscribing to topic: " + topic + " with client ID: " + client.getClientId(), e);
         }
     }
@@ -277,7 +277,7 @@ public class Mqtt {
                     Log.e("MQTT", "Failed to publish message to topic: " + topic, exception);
                 }
             });
-        } catch (MqttException e) {
+        } catch (Exception e) {
             Log.e("MQTT", "Error publishing message to topic: " + topic, e);
         }
     }
@@ -326,5 +326,9 @@ public class Mqtt {
             return;
         }
         sensorsActive.postValue(active);
+    }
+
+    public MutableLiveData<List<Pair<String, String>>> getSubbedMessagesList() {
+        return mutableSubscribedMessagesList;
     }
 }

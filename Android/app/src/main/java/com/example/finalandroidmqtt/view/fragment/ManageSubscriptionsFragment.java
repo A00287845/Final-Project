@@ -20,7 +20,7 @@ import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 import com.example.finalandroidmqtt.pojo.ClientHolder;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
+import info.mqtt.android.service.MqttAndroidClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,29 +168,6 @@ public class ManageSubscriptionsFragment extends Fragment {
             dropDownAdapter.clear();
             dropDownAdapter.addAll(dropdownItems);
 
-//            List<ClientHolder> clientList = application.getMqtt().getClients().getValue();
-//
-//            Map<String, MqttAndroidClient> clientMap = application.getMqtt().getMutableMqttClientMap().getValue();
-//            if (clientMap == null) {
-//                Log.d("EOGHAN", "ManageClientsFragment handleDropdown: clientMap is null");
-//                return;
-//            }
-//
-//            if (clientMap.isEmpty()) {
-//                Log.d("EOGHAN", "ManageClientsFragment handleDropdown: clientMap is empty");
-//
-//                return;
-//            }
-//
-//
-//            for (MqttAndroidClient client : clientMap.values()) {
-//                dropdownItems.add(client.getClientId());
-//            }
-//
-//            Log.d("EOGHAN", "ManageClientsFragment handleDropdown: refresh case");
-//
-//            dropDownAdapter.clear();
-//            dropDownAdapter.addAll(dropdownItems);
         }
 
 

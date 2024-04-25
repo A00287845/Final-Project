@@ -3,3 +3,4 @@ a00287845/device/rpi/sensors/pressure: Carries atmospheric pressure data from th
 a00287845/device/android/sensors/light: Carries light sensor data from the Android device.
 a00287845/device/android/sensors/proximity: Carries proximity sensor data from the Android device.
 a00287845/device/esp8266/actuators/led: Receives commands to control LED states on the ESP8266.
+a00287845/device/android/input/text: Receives text input from Android app

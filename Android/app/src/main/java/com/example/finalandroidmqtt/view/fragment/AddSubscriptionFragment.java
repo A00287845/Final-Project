@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
+import info.mqtt.android.service.MqttAndroidClient;
 
 import java.util.Objects;
 

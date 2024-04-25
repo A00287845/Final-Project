@@ -3,8 +3,8 @@ package com.example.finalandroidmqtt.pojo;
 import android.hardware.Sensor;
 import android.util.Pair;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
-
+//import org.eclipse.paho.android.service.MqttAndroidClient;
+import info.mqtt.android.service.MqttAndroidClient;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

@@ -19,7 +19,7 @@ import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
 import com.example.finalandroidmqtt.pojo.ClientHolder;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
+import info.mqtt.android.service.MqttAndroidClient;
 
 import java.util.List;
 import java.util.Map;
