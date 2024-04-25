@@ -44,7 +44,7 @@ dependencies {
     implementation (libs.legacy.support.v4)
     implementation (libs.paho.mqtt.android)
     implementation (libs.speedviewlib)
-//    implementation (libs.org.eclipse.paho.android.service)
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation (libs.localbroadcastmanager)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)

@@ -18,6 +18,9 @@
         android:theme="@style/Theme.FinalAndroidMqtt"
         tools:targetApi="31">
         <activity
+            android:name=".view.activity.sensors.SensorsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.datavisualiser.DataVisualiserActivity"
             android:exported="false" />
         <activity
@@ -38,9 +41,7 @@
             android:exported="false" />
         <activity
             android:name=".view.activity.MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>

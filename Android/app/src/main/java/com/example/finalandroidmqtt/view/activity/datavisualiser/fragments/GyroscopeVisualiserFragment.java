@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.finalandroidmqtt.MqttApplication;
@@ -53,7 +52,7 @@ public class GyroscopeVisualiserFragment extends Fragment {
         yawTv = view.findViewById(R.id.gyroYawTv);
 
         setupMqtt();
-        beginObserving(view);
+        beginObserving();
     }
 
     private void setupMqtt() {
@@ -61,11 +60,13 @@ public class GyroscopeVisualiserFragment extends Fragment {
         application.getMqtt().setupBroker(application.getApplicationContext(), GYROSCOPE_CLIENT_NAME, "ssl://930094acb7da4acfbf5761b3ac2c7c90.s1.eu.hivemq.cloud:8883");
     }
 
-    private void beginObserving(View view) {
+    private void beginObserving() {
         application.getMqtt().getClients().observe(getViewLifecycleOwner(), clients -> {
             if(clients != null){
                 ClientHolder holder =  application.getMqtt().getClientHolderFromListByName(GYROSCOPE_CLIENT_NAME, Objects.requireNonNull(application.getMqtt().getClients().getValue()));
-                Log.d("HELP", ""+holder.getSubscriptions());
+                if(holder == null){
+                    return;
+                }
                 if(holder.getSubscriptions().contains(GYROSCOPE_TOPIC)){
                     return;
                 }
@@ -89,7 +90,7 @@ public class GyroscopeVisualiserFragment extends Fragment {
     private void displayResponse(String input){
 
         Log.d("help", input);
-        String jsonPart = input.substring(input.indexOf('{')); // Assuming JSON starts with '{'
+        String jsonPart = input.substring(input.indexOf('{'));
 
         try {
             JSONObject jsonObject = new JSONObject(jsonPart);
