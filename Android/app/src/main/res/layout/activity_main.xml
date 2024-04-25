@@ -23,15 +23,6 @@
         android:text="@string/subscriptions"
         app:layout_constraintStart_toEndOf="@+id/clientFragmentButton"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
-
-        android:id="@+id/messageFragmentButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:text="Send Message"
-        app:layout_constraintStart_toEndOf="@+id/subsFragmentButton"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/contentArea"

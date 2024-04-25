@@ -13,6 +13,7 @@ import com.example.finalandroidmqtt.pojo.ClientHolder;
 
 import info.mqtt.android.service.Ack;
 import info.mqtt.android.service.MqttAndroidClient;
+
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -32,13 +33,14 @@ import java.util.Set;
 public class Mqtt {
     private static volatile Mqtt instance;
     private final MutableLiveData<List<ClientHolder>> clients = new MutableLiveData<>();
-    private final MutableLiveData<List<Pair<String,String>>> mutableSubscribedMessagesList = new MutableLiveData<>();
+    private final MutableLiveData<List<Pair<String, String>>> mutableSubscribedMessagesList = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> sensorsActive = new MutableLiveData<>();
 
     private MqttApplication.SensorHandler sensorHandler;
 
-    private Mqtt(){}
+    private Mqtt() {
+    }
 
     private Mqtt(MqttApplication.SensorHandler sensorHandler) {
         this.sensorHandler = sensorHandler;
@@ -129,12 +131,14 @@ public class Mqtt {
     }
 
     public void addSubbedMessageToList(String topic, String message) {
-        List<Pair<String,String>> messageList = mutableSubscribedMessagesList.getValue();
+        List<Pair<String, String>> messageList = mutableSubscribedMessagesList.getValue();
         if (messageList == null) {
             messageList = new ArrayList<>();
         }
         Log.d("EOGHAN", "Mqtt addSubbedMssageToList: Topic: " + topic + " Message: " + message);
-
+        if (messageList.size() > 200) {
+            messageList = new ArrayList<>();
+        }
         messageList.add(new Pair<>(topic, message));
         mutableSubscribedMessagesList.postValue(messageList);
     }
@@ -142,6 +146,14 @@ public class Mqtt {
 
     public void setupBroker(Context appContext, String clientId, String brokerUri) {
         Log.d("Eoghan", "Mqtt setupBroker");
+        List<ClientHolder> clientHolderList = clients.getValue();
+        if (clientHolderList!=null) {
+            for (ClientHolder holder : clientHolderList) {
+                if (holder.getName().equals(clientId)){
+                    return;
+                }
+            }
+        }
 
         MqttAndroidClient mqttAndroidClient = getMqttAndroidClient(appContext, clientId, brokerUri);
 
@@ -249,11 +261,11 @@ public class Mqtt {
         }
     }
 
-    public void publishMessage(String topic, String payload){
-        if(clients.getValue()== null){
+    public void publishMessage(String topic, String payload) {
+        if (clients.getValue() == null) {
             return;
         }
-        if(clients.getValue().isEmpty()){
+        if (clients.getValue().isEmpty()) {
             return;
         }
         publishMessage(clients.getValue().get(0).getClient(), topic, payload, 2, false);
@@ -322,7 +334,7 @@ public class Mqtt {
                 break;
             }
         }
-        if (active == Boolean.TRUE.equals(sensorsActive.getValue())){
+        if (active == Boolean.TRUE.equals(sensorsActive.getValue())) {
             return;
         }
         sensorsActive.postValue(active);

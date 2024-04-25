@@ -5,13 +5,14 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".view.fragment.SendMessageFragment" >
+    tools:context=".view.activity.messagepublish.SendMessageFragment" >
 
     <EditText
         android:id="@+id/sendMessageEtTopic"
         android:layout_width="301dp"
         android:layout_height="44dp"
         android:ems="10"
+        android:hint="a00287845/device/android/input/text"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

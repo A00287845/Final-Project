@@ -31,4 +31,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/openMainActButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Main"
+        android:backgroundTint="#676666"
+        android:textColor="@color/white"
+        android:layout_marginTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/openVisualiseActivityButt" />
+
+    <Button
+        android:id="@+id/openMessagePubAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message Publish"
+        android:backgroundTint="#676666"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/openMainActButt" />
 </androidx.constraintlayout.widget.ConstraintLayout>

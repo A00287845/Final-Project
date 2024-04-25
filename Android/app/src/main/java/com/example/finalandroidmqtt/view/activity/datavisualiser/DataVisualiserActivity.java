@@ -39,10 +39,6 @@ public class DataVisualiserActivity extends AppCompatActivity {
 
         addFragment(new GyroscopeVisualiserFragment());
 
-        findViewById(R.id.backToMenu).setOnClickListener( v -> {
-            startActivity(new Intent(DataVisualiserActivity.this, MenuActivity.class));
-
-        });
     }
 
 

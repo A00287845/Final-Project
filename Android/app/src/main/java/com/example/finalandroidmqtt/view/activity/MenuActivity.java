@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.finalandroidmqtt.R;
 import com.example.finalandroidmqtt.view.activity.datavisualiser.DataVisualiserActivity;
+import com.example.finalandroidmqtt.view.activity.messagepublish.MessagePublishActivity;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -29,5 +30,12 @@ public class MenuActivity extends AppCompatActivity {
             startActivity(new Intent(MenuActivity.this, DataVisualiserActivity.class));
         });
 
+        findViewById(R.id.openMainActButt).setOnClickListener(v->{
+            startActivity(new Intent(MenuActivity.this, MainActivity.class));
+        });
+
+        findViewById(R.id.openMessagePubAct).setOnClickListener(v->{
+            startActivity(new Intent(MenuActivity.this, MessagePublishActivity.class));
+        });
     }
 }
