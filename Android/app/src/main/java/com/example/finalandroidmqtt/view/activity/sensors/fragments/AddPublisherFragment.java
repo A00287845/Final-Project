@@ -110,10 +110,10 @@ public class AddPublisherFragment extends DialogFragment {
     }
 
     private void setHintsAndTopic(String[] topic, String sensorName) {
-        if (sensorName.contains("Proximity")) {
+        if (sensorName.contains("P") || sensorName.contains("p")) {
             topic[0] = "a00287845/device/android/sensors/proximity";
             subscriptionEditText.setHint(topic[0]);
-        } else if (sensorName.contains("Light")) {
+        } else if (sensorName.contains("L") || sensorName.contains("l")) {
             topic[0] = "a00287845/device/android/sensors/light";
             subscriptionEditText.setHint(topic[0]);
         }
