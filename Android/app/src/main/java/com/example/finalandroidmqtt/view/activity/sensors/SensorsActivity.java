@@ -2,7 +2,11 @@ package com.example.finalandroidmqtt.view.activity.sensors;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +22,7 @@ import com.example.finalandroidmqtt.pojo.ClientHolder;
 import com.example.finalandroidmqtt.util.RepeatedTaskLooper;
 import com.example.finalandroidmqtt.view.activity.sensors.fragments.AddPublisherFragment;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class SensorsActivity extends AppCompatActivity {
@@ -55,9 +60,9 @@ public class SensorsActivity extends AppCompatActivity {
             dialogFragment.show(getSupportFragmentManager(), "addSensorTopic");
         });
         SwitchCompat sensorSwitch = findViewById(R.id.sensorSwitch);
-        sensorSwitch.setOnClickListener(v->{
+        sensorSwitch.setOnClickListener(v -> {
             Log.d("SensorcActivity", "sensor switch clicked");
-            if(application.getSensorHandler() != null) {
+            if (application.getSensorHandler() != null) {
                 if (sensorSwitch.isChecked()) {
                     Log.d("SensorcActivity", "sensor switch activated");
 
@@ -71,7 +76,30 @@ public class SensorsActivity extends AppCompatActivity {
                 }
             }
         });
+        Spinner sensorSpeedSpinner = findViewById(R.id.pollSpeedSpinner);
+        ArrayAdapter<Integer> sensorSpeedAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList(500, 1000, 2000, 5000, 10000));
+        sensorSpeedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sensorSpeedSpinner.setAdapter(sensorSpeedAdapter);
 
+        sensorSpeedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int pollSpeed = sensorSpeedAdapter.getItem(position);
+                if (looper == null) {
+                    return;
+                }
+                if (looper.isRunning()) {
+                    if (sensorSwitch.isChecked()) {
+                        looper.setInterval(pollSpeed);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void setUpObservation() {
