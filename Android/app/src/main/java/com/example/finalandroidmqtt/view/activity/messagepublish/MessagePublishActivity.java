@@ -1,7 +1,6 @@
 package com.example.finalandroidmqtt.view.activity.messagepublish;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,13 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.finalandroidmqtt.MqttApplication;
 import com.example.finalandroidmqtt.R;
-import com.example.finalandroidmqtt.pojo.ClientHolder;
-import com.example.finalandroidmqtt.util.RepeatedTaskLooper;
-
-import java.util.Objects;
-
 
 public class MessagePublishActivity extends AppCompatActivity {
     @Override

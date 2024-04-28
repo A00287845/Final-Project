@@ -3,7 +3,6 @@ package com.example.finalandroidmqtt.view.activity.sensors.fragments;
 import android.app.Dialog;
 import android.hardware.Sensor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,7 +55,6 @@ public class AddPublisherFragment extends DialogFragment {
         sensorSpinner = dialogView.findViewById(R.id.sensorSpinner);
         subscriptionEditText = dialogView.findViewById(R.id.subscriptionEditText);
 
-        // Load sensor names
         sensorAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, getSensorNames());
         sensorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sensorSpinner.setAdapter(sensorAdapter);

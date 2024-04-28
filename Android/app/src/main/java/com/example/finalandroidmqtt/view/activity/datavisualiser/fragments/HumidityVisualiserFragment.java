@@ -32,7 +32,6 @@ public class HumidityVisualiserFragment extends Fragment {
 
 
     public HumidityVisualiserFragment() {
-        // Required empty public constructor
     }
 
 
@@ -61,7 +60,7 @@ public class HumidityVisualiserFragment extends Fragment {
 
 
     private void setupHumidityGauge() {
-        humidityGauge.setMaxSpeed(100); // Assuming humidity is measured from 0% to 100%
+        humidityGauge.setMaxSpeed(100);
         humidityGauge.setMinSpeed(0);
         humidityGauge.setUnit("%");
     }

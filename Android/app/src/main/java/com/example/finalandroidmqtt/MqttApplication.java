@@ -48,8 +48,6 @@ public class MqttApplication extends Application {
         public void initializeSensors() {
             proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
             lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-//            startProximitySensor();
-//            startLightSensor();
             sensorList = Arrays.asList(proximitySensor, lightSensor);
         }
 
@@ -105,7 +103,6 @@ public class MqttApplication extends Application {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // This can be implemented if needed.
         }
 
         public List<Sensor> getSensorList() {

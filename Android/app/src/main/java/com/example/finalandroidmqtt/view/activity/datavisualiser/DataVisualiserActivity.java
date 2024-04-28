@@ -29,15 +29,12 @@ public class DataVisualiserActivity extends AppCompatActivity {
             return insets;
         });
 
-
         findViewById(R.id.gyroscopeFragmentButt).setOnClickListener(v -> addFragment(new GyroscopeVisualiserFragment()));
         findViewById(R.id.humidityFragmentButt).setOnClickListener(v -> addFragment(new HumidityVisualiserFragment()));
         findViewById(R.id.temyAndHumidFragmentButt).setOnClickListener(v-> addFragment(new TemperatureAndHumidityVisualiserFragment()));
 
         addFragment(new GyroscopeVisualiserFragment());
-
     }
-
 
     private void addFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

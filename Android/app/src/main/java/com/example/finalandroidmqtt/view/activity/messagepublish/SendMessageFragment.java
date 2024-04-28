@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,6 @@ import com.example.finalandroidmqtt.pojo.ClientHolder;
 
 import java.util.Objects;
 
-import info.mqtt.android.service.MqttAndroidClient;
-
-
 public class SendMessageFragment extends Fragment {
 
     private final String SEND_MESSAGE_CLIENT_NAME = "android_message_client_name";
@@ -30,9 +26,7 @@ public class SendMessageFragment extends Fragment {
     private MqttApplication application;
 
     public SendMessageFragment() {
-        // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +51,6 @@ public class SendMessageFragment extends Fragment {
         beginObserving();
 
         application.getMqtt().setupBroker(application.getApplicationContext(), SEND_MESSAGE_CLIENT_NAME, "ssl://930094acb7da4acfbf5761b3ac2c7c90.s1.eu.hivemq.cloud:8883");
-
 
         view.findViewById(R.id.sendMessageButt).setOnClickListener(v -> {
             String topicString = topicEt.getText().toString();
@@ -85,7 +78,6 @@ public class SendMessageFragment extends Fragment {
                     return;
                 }
                 setup = true;
-
             }
         });
 
